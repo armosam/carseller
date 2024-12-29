@@ -20,7 +20,10 @@
             </svg>
         </button>
         <div class="navbar-auth">
-            <a href="{{route('car.create')}}" class="btn btn-add-new-car">
+            <x-layouts.nav-link href="{{route('car.search')}}" :active="request()->is('car/search')">Search</x-layouts.nav-link>
+
+            @auth()
+            <x-layouts.nav-link href="{{route('car.create')}}" :active="request()->is('car/create')" class="btn btn-add-new-car">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -36,9 +39,10 @@
                     />
                 </svg>
                 Add new Car
-            </a>
+            </x-layouts.nav-link>
+
             <div class="navbar-menu" tabindex="-1">
-                <a href="javascript:void(0)" class="navbar-menu-handler">
+                <x-layouts.nav-link href="javascript:void(0)" class="navbar-menu-handler">
                     My Account
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +58,7 @@
                             d="m19.5 8.25-7.5 7.5-7.5-7.5"
                         />
                     </svg>
-                </a>
+                </x-layouts.nav-link>
                 <ul class="submenu">
                     <li>
                         <x-layouts.nav-link href="{{route('car.index')}}" :active="request()->is('car')">My Cars</x-layouts.nav-link>
@@ -63,13 +67,16 @@
                         <x-layouts.nav-link href="{{route('car.watchlist')}}" :active="request()->is('car/watchlist')">My Favourite Cars</x-layouts.nav-link>
                     </li>
                     <li>
-                        <form action="#" method="post">
+                        <form action="{{route('logout')}}" method="post">
+                            @csrf
                             <button>Logout</button>
                         </form>
                     </li>
                 </ul>
             </div>
-            <a href="{{route('signup')}}" class="btn btn-primary btn-signup">
+            @endauth
+            @guest()
+            <x-layouts.nav-link href="{{route('signup')}}" class="btn btn-primary btn-signup">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -85,8 +92,8 @@
                     />
                 </svg>
                 Signup
-            </a>
-            <a href="{{route('login')}}" class="btn btn-login flex items-center">
+            </x-layouts.nav-link>
+            <x-layouts.nav-link href="{{route('login')}}" class="btn btn-login flex items-center">
                 <svg
                     style="width: 18px; fill: currentColor; margin-right: 4px"
                     viewBox="0 0 1024 1024"
@@ -99,7 +106,8 @@
                     />
                 </svg>
                 Login
-            </a>
+            </x-layouts.nav-link>
+            @endguest
         </div>
     </div>
 </header>
