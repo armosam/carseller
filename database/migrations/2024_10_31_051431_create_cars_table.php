@@ -17,14 +17,16 @@ return new class extends Migration
             $table->foreignId('model_id')->constrained('models');
             $table->integer('year');
             $table->integer('price');
-            $table->string('vin', 255);
+            $table->string('vin', 17);
             $table->integer('millage');
+            $table->string('interior_color', 30)->nullable();
+            $table->string('exterior_color', 30)->nullable();
             $table->foreignId('car_type_id')->constrained('car_types');
             $table->foreignId('fuel_type_id')->constrained('fuel_types');
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('city_id')->constrained('cities');
             $table->string('address', 255);
-            $table->string('phone', 45);
+            $table->string('phone', 15)->nullable();
             $table->longText('description')->nullable();
             $table->timestamp('published_at')->nullable();
             $table->timestamps();

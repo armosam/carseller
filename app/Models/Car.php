@@ -23,6 +23,8 @@ class Car extends EloquentModel
         'price',
         'vin',
         'millage',
+        'interior_color',
+        'exterior_color',
         'car_type_id',
         'fuel_type_id',
         'user_id',
