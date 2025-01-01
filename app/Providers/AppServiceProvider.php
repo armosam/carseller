@@ -2,12 +2,16 @@
 
 namespace App\Providers;
 
-use App\Models\Model;
+//use App\Models\Model;
+use App\Models\Car;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -46,5 +50,15 @@ class AppServiceProvider extends ServiceProvider
                 }
             });
         }
+
+        // Configure default password rules
+        Password::defaults(function () {
+            $rule = Password::min(8);
+
+            return $this->app->isProduction()
+                ? $rule->numbers()->symbols()->mixedCase()->uncompromised()
+                : $rule;
+        });
+
     }
 }

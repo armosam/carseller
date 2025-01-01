@@ -2,9 +2,10 @@
     <form action="" method="post">
         @csrf
 
-        <x-form.input type="email" name="email" :value="old('email')" placeholder="Your Email" />
+        <x-form.input type="password" name="password" placeholder="New Password" autocomplete="off" />
+        <x-form.input type="password" name="password_confirmation" placeholder="Confirm Password" autocomplete="off" />
 
-        <button class="btn btn-primary btn-login w-full">Reset Password</button>
+        <button class="btn btn-primary btn-login w-full">Set New Password</button>
 
         <div class="login-text-dont-have-account">
             Don't need to reset your password ? -

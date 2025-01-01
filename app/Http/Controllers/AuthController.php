@@ -2,86 +2,44 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Models\User;
+use App\Http\Requests\Session\PasswordResetRequest;
+use App\Http\Requests\Session\StorePasswordRequest;
 
 class AuthController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Open password reset form
      */
-    public function index()
+    public function passwordReset()
     {
-        //
+        return view('auth.password-reset');
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store a newly created resource in storage and send email.
      */
-    public function create()
+    public function storePasswordReset(PasswordResetRequest $request)
     {
-        //
+        $attributes = $request->validated();
+        dd($attributes);
+        // Send verification email for password change
+    }
+
+    /**
+     * Open set password form
+     */
+    public function setPassword()
+    {
+        return view('auth.set-password');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function storePassword(StorePasswordRequest $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateUserRequest $request, User $user)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
-    {
-        //
-    }
-
-
-    public function login()
-    {
-        return view('auth.login');
-    }
-
-    public function signup()
-    {
-        return view('auth.signup');
-    }
-
-    public function logout()
-    {
-
-    }
-
-    public function passwordReset()
-    {
-        return view('auth.password-reset');
+        $attributes = $request->validated();
+        dd($attributes);
+        // store password
     }
 }

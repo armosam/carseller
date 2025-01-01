@@ -1,15 +1,12 @@
 <x-auth-layout title="Login" bodyClass="page-login">
     <form action="" method="post">
-        <div class="form-group">
-            <input type="email" placeholder="Your Email"/>
-        </div>
-        <div class="form-group">
-            <input type="password" placeholder="Your Password" autocomplete="off"/>
-        </div>
+        @csrf
+
+        <x-form.input type="email" name="email" :value="old('email')" placeholder="Your Email" />
+        <x-form.input type="password" name="password" placeholder="Your Password" autocomplete="off" />
+
         <div class="text-right mb-medium">
-            <a href="{{ route('password.reset') }}" class="auth-page-password-reset"
-            >Reset Password</a
-            >
+            <a href="{{ route('password.reset') }}" class="auth-page-password-reset">Reset Password</a>
         </div>
 
         <button class="btn btn-primary btn-login w-full">Login</button>
