@@ -3,12 +3,10 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\SignupController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
+Route::view('about', 'about')->name('about');
 
 Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::get('/signup', 'signup')->name('signup');
