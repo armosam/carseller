@@ -110,7 +110,12 @@ class CarController extends Controller
             abort(403, 'You are not authorized to modify this car.');
         }*/
 
-        Gate::authorize('car_update', $car);
+        if (Auth::user()->cannot('car_update', $car)) {
+            abort(403);
+        }
+
+        // Gate::authorize('car_update', $car);
+
         return view('car.edit', ['car' => $car]);
     }
 
