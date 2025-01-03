@@ -102,6 +102,15 @@ class CarController extends Controller
      */
     public function edit(Car $car): View
     {
+        /*Gate::define('car_update', function (User $user, Car $car) {
+            return $car->owner()->is($user);
+        });
+
+        if ($car->owner()->isNot(auth()->user())) {
+            abort(403, 'You are not authorized to modify this car.');
+        }*/
+
+        Gate::authorize('car_update', $car);
         return view('car.edit', ['car' => $car]);
     }
 

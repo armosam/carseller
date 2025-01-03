@@ -60,5 +60,10 @@ class AppServiceProvider extends ServiceProvider
                 : $rule;
         });
 
+        // Car Update authorization rule as Gate
+        Gate::define('car_update', function (User $user, Car $car) {
+            return $car->owner()->is($user);
+        });
+
     }
 }
