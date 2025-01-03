@@ -3,273 +3,147 @@
         <div class="container-small">
             <h1 class="car-details-page-title">Add new car</h1>
             <form
-                action=""
+                action="/car"
                 method="POST"
                 enctype="multipart/form-data"
                 class="card add-new-car-form"
             >
+                @csrf
+                <input type="hidden" name="user_id" value="{{Auth()->id()}}">
                 <div class="form-content">
                     <div class="form-details">
                         <div class="row">
                             <div class="col">
-                                <div class="form-group">
-                                    <label>Maker</label>
-                                    <select>
-                                        <option value="">Maker</option>
-                                        <option value="bmw">BMW</option>
-                                        <option value="lexus">Lexus</option>
-                                        <option value="mercedes">Mercedes</option>
-                                    </select>
-                                    <p class="error-message">This field is required</p>
-                                </div>
+                                <x-form.dropdown label="Maker" name="maker_id" id="makerSelect" :value="old('maker_id')">
+                                    <option value="">Maker</option>
+                                    @foreach(\App\Models\Maker::query()->get() as $maker)
+                                        <option
+                                            value="{{$maker->id}}" @selected(old('maker_id') == $maker->id)>{{$maker->name}}</option>
+                                    @endforeach
+                                </x-form.dropdown>
                             </div>
                             <div class="col">
-                                <div class="form-group">
-                                    <label>Model</label>
-                                    <select>
-                                        <option value="">Model</option>
-                                    </select>
-                                </div>
+                                <x-form.dropdown label="Model" name="model_id" id="modelSelect">
+                                    <option value="">Model</option>
+                                    @foreach(\App\Models\Model::query()->get() as $model)
+                                        <option
+                                            value="{{$model->id}}" data-parent="{{$model->maker_id}}" style="display: none" @selected(old('model_id') == $model->id)>{{$model->name}}</option>
+                                    @endforeach
+                                </x-form.dropdown>
                             </div>
                             <div class="col">
-                                <div class="form-group">
-                                    <label>Ye ar</label>
-                                    <select>
-                                        <option value="">Year</option>
-                                        <option value="2024">2024</option>
-                                        <option value="2023">2023</option>
-                                        <option value="2022">2022</option>
-                                        <option value="2021">2021</option>
-                                        <option value="2020">2020</option>
-                                        <option value="2019">2019</option>
-                                        <option value="2018">2018</option>
-                                        <option value="2017">2017</option>
-                                        <option value="2016">2016</option>
-                                        <option value="2015">2015</option>
-                                        <option value="2014">2014</option>
-                                        <option value="2013">2013</option>
-                                        <option value="2012">2012</option>
-                                        <option value="2011">2011</option>
-                                        <option value="2010">2010</option>
-                                        <option value="2009">2009</option>
-                                        <option value="2008">2008</option>
-                                        <option value="2007">2007</option>
-                                        <option value="2006">2006</option>
-                                        <option value="2005">2005</option>
-                                        <option value="2004">2004</option>
-                                        <option value="2003">2003</option>
-                                        <option value="2002">2002</option>
-                                        <option value="2001">2001</option>
-                                        <option value="2000">2000</option>
-                                        <option value="1999">1999</option>
-                                        <option value="1998">1998</option>
-                                        <option value="1997">1997</option>
-                                        <option value="1996">1996</option>
-                                        <option value="1995">1995</option>
-                                        <option value="1994">1994</option>
-                                        <option value="1993">1993</option>
-                                        <option value="1992">1992</option>
-                                        <option value="1991">1991</option>
-                                        <option value="1990">1990</option>
-                                    </select>
-                                </div>
+                                <x-form.dropdown label="Year" name="year">
+                                    <option value="">Year</option>
+                                    @foreach(range(2025, 1990, -1) as $year)
+                                        <option value="{{$year}}" @selected(old('year') == $year)>{{$year}}</option>
+                                    @endforeach
+                                </x-form.dropdown>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Car Type</label>
+                        <x-form.radio-group name="car_type_id" label="Car Type">
                             <div class="row">
-                                <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="car_type" value="sedan" />
-                                        Sedan
-                                    </label>
-                                </div>
+                                @foreach(\App\Models\CarType::query()->get() as $fuelType)
+                                    <div class="col">
+                                        <label class="inline-radio">
+                                            <input type="radio" name="car_type_id"
+                                                   value="{{$fuelType->id}}" @checked(old('car_type_id') == $fuelType->id) />
+                                            {{$fuelType->name}}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </x-form.radio-group>
+                        <div class="row">
+                            <div class="col">
+                                <x-form.input type="number" label="Price" name="price" placeholder="Price"
+                                              :value="old('price')"/>
+                            </div>
+                            <div class="col">
+                                <x-form.input label="VIN Number" name="vin" placeholder="VIN Number"
+                                              :value="old('vin')"/>
+                            </div>
+                            <div class="col">
+                                <x-form.input type="number" label="Mileage" name="mileage" placeholder="Mileage"
+                                              :value="old('mileage')"/>
+                            </div>
+                        </div>
 
-                                <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="car_type" value="hatchback" />
-                                        Hatchback
-                                    </label>
-                                </div>
+                        <x-form.radio-group name="fuel_type_id" label="Fuel Type">
+                            <div class="row">
+                                @foreach(\App\Models\FuelType::query()->get() as $fuelType)
+                                    <div class="col">
+                                        <label class="inline-radio">
+                                            <input type="radio" name="fuel_type_id"
+                                                   value="{{$fuelType->id}}" @checked(old('fuel_type_id') == $fuelType->id) />
+                                            {{$fuelType->name}}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </x-form.radio-group>
 
-                                <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="car_type" value="suv" />
-                                        SUV (Sport Utility Vehicle)
-                                    </label>
-                                </div>
+                        <div class="row">
+                            <div class="col">
+                                <x-form.input label="Interior Color" name="interior_color" placeholder="Interior Color"
+                                              :value="old('interior_color')"/>
+                            </div>
+                            <div class="col">
+                                <x-form.input label="Exterior Color" name="exterior_color" placeholder="Exterior Color"
+                                              :value="old('exterior_color')"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <x-form.dropdown label="State/Region" name="state_id" id="stateSelect">
+                                    <option value="">State</option>
+                                    @foreach(\App\Models\State::query()->get() as $state)
+                                        <option value="{{$state->id}}" @selected(old('state_id') == $state->id)>{{$state->name}}</option>
+                                    @endforeach
+                                </x-form.dropdown>
+                            </div>
+                            <div class="col">
+                                <x-form.dropdown label="City" name="city_id" id="citySelect">
+                                    <option value="">City</option>
+                                    @foreach(\App\Models\City::query()->get() as $city)
+                                        <option value="{{$city->id}}" data-parent="{{$city->state_id}}" style="display: none" @selected(old('city_id') == $city->id)>{{$city->name}}</option>
+                                    @endforeach
+                                </x-form.dropdown>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <div class="form-group">
-                                    <label>Price</label>
-                                    <input type="number" placeholder="Price" />
-                                </div>
+                                <x-form.input type="text" label="Address" name="address" placeholder="Address"
+                                              :value="old('address')"/>
                             </div>
                             <div class="col">
-                                <div class="form-group">
-                                    <label>Vin Code</label>
-                                    <input placeholder="Vin Code" />
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label>Mileage (ml)</label>
-                                    <input placeholder="Mileage" />
-                                </div>
+                                <x-form.input type="tel" label="Phone" name="phone" placeholder="Phone"
+                                              :value="old('phone')"/>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label>Fuel Type</label>
+                        <x-form.checkbox-group name="feature">
                             <div class="row">
                                 <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="fuel_type" value="gasoline" />
-                                        Gasoline
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="fuel_type" value="diesel" />
-                                        Diesel
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="fuel_type" value="electric" />
-                                        Electric
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <label class="inline-radio">
-                                        <input type="radio" name="fuel_type" value="hybrid" />
-                                        Hybrid
-                                    </label>
+                                    <?php $features = \App\Models\CarFeature::featuresList(); $num = count($features) / 2; ?>
+                                    @foreach($features as $feature_name => $feature_label)
+                                        @if($num == 0) </div><div class="col"> @endif
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="{{$feature_name}}" value="1" @checked(old($feature_name) == 1) />
+                                            {{$feature_label}}
+                                        </label>
+                                    <?php $num--; ?>
+                                    @endforeach
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label>State/Region</label>
-                                    <select>
-                                        <option value="">State/Region</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label>City</label>
-                                    <select>
-                                        <option value="">City</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label>Address</label>
-                                    <input placeholder="Address" />
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label>Phone</label>
-                                    <input placeholder="Phone" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col">
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="air_conditioning"
-                                            value="1"
-                                        />
-                                        Air Conditioning
-                                    </label>
+                        </x-form.checkbox-group>
 
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="power_windows" value="1" />
-                                        Power Windows
-                                    </label>
-
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="power_door_locks"
-                                            value="1"
-                                        />
-                                        Power Door Locks
-                                    </label>
-
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="abs" value="1" />
-                                        ABS
-                                    </label>
-
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="cruise_control" value="1" />
-                                        Cruise Control
-                                    </label>
-
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="bluetooth_connectivity"
-                                            value="1"
-                                        />
-                                        Bluetooth Connectivity
-                                    </label>
-                                </div>
-                                <div class="col">
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="remote_start" value="1" />
-                                        Remote Start
-                                    </label>
-
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="gps_navigation" value="1" />
-                                        GPS Navigation System
-                                    </label>
-
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="heated_seats" value="1" />
-                                        Heated Seats
-                                    </label>
-
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="climate_control" value="1" />
-                                        Climate Control
-                                    </label>
-
-                                    <label class="checkbox">
-                                        <input
-                                            type="checkbox"
-                                            name="rear_parking_sensors"
-                                            value="1"
-                                        />
-                                        Rear Parking Sensors
-                                    </label>
-
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="leather_seats" value="1" />
-                                        Leather Seats
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
                         <div class="form-group">
                             <label>Detailed Description</label>
-                            <textarea rows="10"></textarea>
+                            <textarea name="description" rows="10">{{old('description')}}</textarea>
                         </div>
                         <div class="form-group">
                             <label class="checkbox">
-                                <input type="checkbox" name="published" />
+                                <input type="checkbox" name="published" value="1" @checked(old('published') == 1)/>
                                 Published
                             </label>
                         </div>
@@ -292,15 +166,15 @@
                                     />
                                 </svg>
                             </div>
-                            <input id="carFormImageUpload" type="file" multiple />
+                            <input id="carFormImageUpload" type="file" multiple/>
                         </div>
                         <div id="imagePreviews" class="car-form-images"></div>
                     </div>
                 </div>
                 <div class="p-medium" style="width: 100%">
                     <div class="flex justify-end gap-1">
-                        <button type="button" class="btn btn-default">Reset</button>
-                        <button class="btn btn-primary">Submit</button>
+                        <x-form.button type="reset" class="btn btn-default">Reset</x-form.button>
+                        <x-form.button class="btn btn-primary">Submit</x-form.button>
                     </div>
                 </div>
             </form>

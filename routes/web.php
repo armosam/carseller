@@ -24,6 +24,14 @@ Route::controller(SessionController::class)->prefix('auth')->group(function () {
     Route::post('/logout', 'logout')->name('logout');
 })->middleware('guest');
 
-Route::get('/car/search', [CarController::class, 'search'])->name('car.search');
-Route::get('/car/watchlist', [CarController::class, 'watchList'])->name('car.watchlist');
-Route::resource('car', CarController::class);
+Route::controller(CarController::class)->prefix('car')->group(function () {
+    Route::get('/', 'index')->name('car.index')->middleware('auth');
+    Route::post('/', 'store')->name('car.store')->middleware('auth');
+    Route::get('/create', 'create')->name('car.create')->middleware('auth');
+    Route::get('/search', 'search')->name('car.search');
+    Route::get('/watchlist', 'watchList')->name('car.watchlist')->middleware('auth');
+    Route::get('/{car}', 'show')->name('car.show');
+    Route::get('/{car}/edit', 'edit')->name('car.edit')->middleware('auth');
+    Route::addRoute(['PUT','PATCH'],'{car}', 'update')->name('car.update')->middleware('auth');
+    Route::delete('/{car}', 'destroy')->name('car.destroy')->middleware('auth');
+});

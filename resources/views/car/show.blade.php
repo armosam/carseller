@@ -11,12 +11,14 @@
                 <div class="car-images-and-description">
                     <div class="car-images-carousel">
                         <div class="car-image-wrapper">
-                            <img
-                                src="{{$car->primaryImage->image_path}}"
-                                alt=""
-                                class="car-active-image"
-                                id="activeImage"
-                            />
+                            @if(!empty($car->primaryImage->image_path))
+                                <img
+                                    src="{{$car->primaryImage->image_path}}"
+                                    alt=""
+                                    class="car-active-image"
+                                    id="activeImage"
+                                />
+                            @endif
                         </div>
                         <div class="car-image-thumbnails">
                             @foreach($car->images as $image)
@@ -66,18 +68,18 @@
                         <h2 class="car-details-title">Car Specifications</h2>
 
                         <ul class="car-specifications">
-                            <x-car-specification :value="$car->features->air_conditioning">Air Conditioning</x-car-specification>
-                            <x-car-specification :value="$car->features->power_windows">Power Windows</x-car-specification>
-                            <x-car-specification :value="$car->features->power_door_locks">Power Door Locks</x-car-specification>
-                            <x-car-specification :value="$car->features->abs">ABS</x-car-specification>
-                            <x-car-specification :value="$car->features->cruise_control">Cruise Control</x-car-specification>
-                            <x-car-specification :value="$car->features->bluetooth_connectivity">Bluetooth Connectivity</x-car-specification>
-                            <x-car-specification :value="$car->features->remote_start">Remote Start</x-car-specification>
-                            <x-car-specification :value="$car->features->gps_navigation">GPS Navigation System</x-car-specification>
-                            <x-car-specification :value="$car->features->heated_seats">Heated Seats</x-car-specification>
-                            <x-car-specification :value="$car->features->climate_control">Climate Control</x-car-specification>
-                            <x-car-specification :value="$car->features->rear_parking_sensors">Rear Parking Sensors</x-car-specification>
-                            <x-car-specification :value="$car->features->leather_seats">Leather Seats</x-car-specification>
+                            <x-car-specification :value="$car->features ? $car->features->air_conditioning : ''">Air Conditioning</x-car-specification>
+                            <x-car-specification :value="$car->features ? $car->features->power_windows : ''">Power Windows</x-car-specification>
+                            <x-car-specification :value="$car->features ? $car->features->power_door_locks : ''">Power Door Locks</x-car-specification>
+                            <x-car-specification :value="$car->features ? $car->features->abs : ''">ABS</x-car-specification>
+                            <x-car-specification :value="$car->features ? $car->features->cruise_control : ''">Cruise Control</x-car-specification>
+                            <x-car-specification :value="$car->features ? $car->features->bluetooth_connectivity : ''">Bluetooth Connectivity</x-car-specification>
+                            <x-car-specification :value="$car->features ? $car->features->remote_start : ''">Remote Start</x-car-specification>
+                            <x-car-specification :value="$car->features ? $car->features->gps_navigation : ''">GPS Navigation System</x-car-specification>
+                            <x-car-specification :value="$car->features ? $car->features->heated_seats : ''">Heated Seats</x-car-specification>
+                            <x-car-specification :value="$car->features ? $car->features->climate_control : ''">Climate Control</x-car-specification>
+                            <x-car-specification :value="$car->features ? $car->features->rear_parking_sensors : ''">Rear Parking Sensors</x-car-specification>
+                            <x-car-specification :value="$car->features ? $car->features->leather_seats : ''">Leather Seats</x-car-specification>
                         </ul>
                     </div>
                 </div>
@@ -114,8 +116,8 @@
                             <td>{{$car->year}}</td>
                         </tr>
                         <tr>
-                            <th>Millage</th>
-                            <td>{{$car->millage}}</td>
+                            <th>Mileage</th>
+                            <td>{{$car->mileage}}</td>
                         </tr>
                         <tr>
                             <th>Maker</th>

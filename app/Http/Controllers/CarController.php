@@ -8,7 +8,10 @@ use App\Models\CarType;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
+use App\Http\Requests\Car\StoreRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 
 class CarController extends Controller
@@ -34,7 +37,7 @@ class CarController extends Controller
 
 
         // TODO Fix this hardcoded user to be for auth user
-        $cars = User::query()->find(2)
+        $cars = User::query()->find(Auth::id())
             ->cars()
             ->with(['maker', 'model', 'primaryImage'])
             ->orderBy('created_at', 'desc')
@@ -57,9 +60,14 @@ class CarController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        $attributes = $request->validated();
+        //$attributes = $request->safe()->only(['maker_id', 'year', 'vin']);
+
+        $newCar = Car::query()->create($attributes);
+
+        return to_route('car.show', ['car' => $newCar]);
     }
 
     /**
@@ -67,7 +75,7 @@ class CarController extends Controller
      */
     public function show(Request $request, Car $car): View
     {
-        dump($request->path());
+        /*dump($request->path());
         dump($request->url());
         dump($request->fullUrl());
         dump($request->method());
@@ -84,7 +92,7 @@ class CarController extends Controller
         dump($request->schemeAndHttpHost());
         dump($request->header());
         dump($request->bearerToken());
-        dump($request->ip());
+        dump($request->ip());*/
 
         return view('car.show', ['car' => $car]);
     }
@@ -94,13 +102,13 @@ class CarController extends Controller
      */
     public function edit(Car $car): View
     {
-        return view('car.edit');
+        return view('car.edit', ['car' => $car]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Car $car)
+    public function update(StoreRequest $request, Car $car)
     {
         //
     }
