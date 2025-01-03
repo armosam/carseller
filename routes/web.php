@@ -31,7 +31,10 @@ Route::controller(CarController::class)->prefix('car')->group(function () {
     Route::get('/search', 'search')->name('car.search');
     Route::get('/watchlist', 'watchList')->name('car.watchlist')->middleware('auth');
     Route::get('/{car}', 'show')->name('car.show');
-    Route::get('/{car}/edit', 'edit')->name('car.edit')->middleware('auth')->can('car_update', 'car');
-    Route::addRoute(['PUT','PATCH'],'{car}', 'update')->name('car.update')->middleware('auth');
-    Route::delete('/{car}', 'destroy')->name('car.destroy')->middleware('auth');
+    Route::get('/{car}/edit', 'edit')->name('car.edit')->middleware('auth')
+        ->can('update','car');
+    Route::addRoute(['PUT','PATCH'],'{car}', 'update')->name('car.update')->middleware('auth')
+        ->can('update', 'car');
+    Route::delete('/{car}', 'destroy')->name('car.destroy')->middleware('auth')
+        ->can('delete', 'car');
 });

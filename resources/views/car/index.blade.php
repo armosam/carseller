@@ -52,7 +52,7 @@
                                             </svg>
                                             images
                                         </a>
-                                        @can('car_update', $car)
+                                        @can('update', $car)
                                         <a
                                             href="{{route('car.edit', $car)}}"
                                             class="btn btn-edit inline-flex items-center"
@@ -74,6 +74,8 @@
 
                                             edit
                                         </a>
+                                        @endcan
+                                        @can('delete', $car)
                                         <button class="btn btn-delete inline-flex items-center">
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
