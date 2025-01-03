@@ -18,12 +18,13 @@ return new class extends Migration
             $table->integer('year');
             $table->integer('price');
             $table->string('vin', 17);
-            $table->integer('millage');
+            $table->integer('mileage');
             $table->string('interior_color', 30)->nullable();
             $table->string('exterior_color', 30)->nullable();
             $table->foreignId('car_type_id')->constrained('car_types');
             $table->foreignId('fuel_type_id')->constrained('fuel_types');
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('state_id')->constrained('states');
             $table->foreignId('city_id')->constrained('cities');
             $table->string('address', 255);
             $table->string('phone', 15)->nullable();

@@ -15,6 +15,10 @@ class State extends Model
     protected $fillable = ['name'];
 
 
+    public function cars(): HasMany {
+        return $this->hasMany(Car::class, 'state_id', 'id');
+    }
+
     public function cities(): HasMany {
         return $this->hasMany(City::class, 'state_id', 'id');
     }

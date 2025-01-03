@@ -22,12 +22,13 @@ class Car extends EloquentModel
         'year',
         'price',
         'vin',
-        'millage',
+        'mileage',
         'interior_color',
         'exterior_color',
         'car_type_id',
         'fuel_type_id',
         'user_id',
+        'state_id',
         'city_id',
         'address',
         'phone',
@@ -72,6 +73,11 @@ class Car extends EloquentModel
     public function owner (): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function state (): BelongsTo
+    {
+        return $this->belongsTo(State::class, 'state_id', 'id');
     }
 
     public function city (): BelongsTo

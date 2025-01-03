@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\FuelType;
 use App\Models\Maker;
 use App\Models\Model;
+use App\Models\State;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -31,13 +32,16 @@ class CarFactory extends Factory
             'year' => fake()->year(),
             'price' => (int)fake()->randomFloat(2, 5, 100) * 1000,
             'vin' => strtoupper(Str::random(17)),
-            'millage' => (int)fake()->randomFloat(2, 5, 500) * 1000,
+            'mileage' => (int)fake()->randomFloat(2, 5, 500) * 1000,
             'interior_color' => fake()->colorName(),
             'exterior_color' => fake()->colorName(),
             'car_type_id' => CarType::query()->inRandomOrder()->first()->id,
             'fuel_type_id' => FuelType::query()->inRandomOrder()->first()->id,
             'user_id' => User::query()->inRandomOrder()->first()->id,
-            'city_id' => City::query()->inRandomOrder()->first()->id,
+            'state_id' => State::query()->inRandomOrder()->first()->id,
+            'city_id' => function(array $attributes) {
+                return City::query()->where('state_id', $attributes['state_id'])->inRandomOrder()->firstOrFail()->id;
+            },
             'address' => fake()->address(),
             'phone' => function (array $attributes) {
                 return User::query()->find($attributes['user_id'])->phone;
