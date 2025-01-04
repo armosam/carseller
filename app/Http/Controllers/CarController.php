@@ -6,12 +6,14 @@ use App\Models\Car;
 use App\Models\CarImage;
 use App\Models\CarType;
 use App\Models\User;
+use App\Mail\CarAdded;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use App\Http\Requests\Car\StoreRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 
 class CarController extends Controller
@@ -66,6 +68,9 @@ class CarController extends Controller
         //$attributes = $request->safe()->only(['maker_id', 'year', 'vin']);
 
         $newCar = Car::query()->create($attributes);
+
+        // Sending email about car created
+        Mail::to(Auth::user())->send(new CarAdded($newCar));
 
         return to_route('car.show', ['car' => $newCar]);
     }
