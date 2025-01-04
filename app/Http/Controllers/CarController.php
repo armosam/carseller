@@ -10,6 +10,7 @@ use App\Mail\CarAdded;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use App\Http\Requests\Car\StoreRequest;
+use App\Jobs\TranslateJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -70,7 +71,10 @@ class CarController extends Controller
         $newCar = Car::query()->create($attributes);
 
         // Sending email about car created
-        Mail::to(Auth::user())->send(new CarAdded($newCar));
+        //Mail::to(Auth::user())->send(new CarAdded($newCar));
+
+        // Adding queue job to send an email
+        Mail::to(Auth::user())->queue(new CarAdded($newCar));
 
         return to_route('car.show', ['car' => $newCar]);
     }
@@ -120,6 +124,16 @@ class CarController extends Controller
         }*/
 
         // Gate::authorize('car_update', $car);
+
+
+        // Adds a job to the queue in 10 sec using queue closure
+        /*dispatch(function () {
+            logger('Hello World');
+        })->delay(10);*/
+
+
+        // Using dedicated job class to add a job to the queue
+        TranslateJob::dispatch($car);
 
         return view('car.edit', ['car' => $car]);
     }
