@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\ErrorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SessionController;
 use Illuminate\Support\Facades\Route;
@@ -38,3 +39,20 @@ Route::controller(CarController::class)->prefix('car')->group(function () {
     Route::delete('/{car}', 'destroy')->name('car.destroy')->middleware('auth')
         ->can('delete', 'car');
 });
+
+
+Route::prefix('admin')->group(function () {
+    Route::controller(CarController::class)->prefix('car')->group(function () {
+        Route::get('/', 'index')->name('armin.car.index');
+        Route::post('/', 'store')->name('admin.car.store');
+        Route::get('/create', 'create')->name('admin.car.create');
+        Route::get('/search', 'search')->name('admin.car.search');
+        Route::get('/{car}', 'show')->name('admin.car.show');
+        Route::get('/{car}/edit', 'edit')->name('admin.car.edit')->can('update','car');
+        Route::addRoute(['PUT','PATCH'],'{car}', 'update')->name('admin.car.update')->can('update', 'car');
+        Route::delete('/{car}', 'destroy')->name('admin.car.destroy')->can('delete', 'car');
+    });
+});
+
+
+Route::fallback(ErrorController::class);

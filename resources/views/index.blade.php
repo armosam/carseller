@@ -96,9 +96,11 @@
             <div class="container">
                 <h2>Latest Added Cars</h2>
                 <div class="car-items-listing">
-                    @foreach($cars as $car)
+                    @forelse($cars as $car)
                         <x-car-item :$car />
-                    @endforeach
+                    @empty
+                        <div>There are no cars to show</div>
+                    @endforelse
                 </div>
             </div>
         </section>
