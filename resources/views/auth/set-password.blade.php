@@ -7,11 +7,11 @@
 
         <button class="btn btn-primary btn-login w-full">Set New Password</button>
 
-        <div class="login-text-dont-have-account">
-            Don't need to reset your password ? -
-            <a href="{{route('login')}}"> Click here to login</a>
-        </div>
     </form>
+
+    <x-slot:footerLink>
+        Don't need to reset your password ? - <a href="{{route('login')}}"> Click here to login</a>
+    </x-slot:footerLink>
 
     <x-slot:pageImage>
         <img src="/img/car-png-39071.png" alt="" class="img-responsive" />

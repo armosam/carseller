@@ -1,4 +1,4 @@
-<x-auth-layout title="Signup" bodyClass="page-signup">
+<x-auth-layout title="Signup" bodyClass="page-signup" socialLogin="true">
     <form action="" method="post">
         @csrf
 
@@ -11,16 +11,11 @@
 
         <button class="btn btn-primary btn-login w-full">Register</button>
 
-        <div class="grid grid-cols-2 gap-1 social-auth-buttons">
-            <x-google-button name="Google"/>
-            <x-facebook-button name="Facebook"/>
-        </div>
-
-        <div class="login-text-dont-have-account">
-            Already have an account? -
-            <a href="{{route('login')}}"> Click here to login </a>
-        </div>
     </form>
+
+    <x-slot:footerLink>
+        Already have an account? - <a href="{{route('login')}}"> Click here to login </a>
+    </x-slot:footerLink>
 
     <x-slot:pageImage>
         <img src="/img/car-png-39071.png" alt="" class="img-responsive" />

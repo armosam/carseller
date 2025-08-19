@@ -1,4 +1,4 @@
-@props(['title' => '', 'bodyClass' => '', 'pageImage' => ''])
+@props(['title' => '', 'bodyClass' => '', 'pageImage' => '', 'socialLogin' => '', 'footerLink' => ''])
 <x-base-layout :$title :$bodyClass>
     <main>
         <div class="container-small page-login">
@@ -13,6 +13,18 @@
 
                     {{$slot}}
 
+                    @if($socialLogin)
+                    <div class="grid grid-cols-2 gap-1 social-auth-buttons">
+                        <x-google-button name="Google"/>
+                        <x-facebook-button name="Facebook"/>
+                    </div>
+                    @endif
+
+                    @if($footerLink)
+                    <div class="login-text-dont-have-account">
+                        {{ $footerLink }}
+                    </div>
+                    @endif
                 </div>
                 @if($pageImage)
                     <div class="auth-page-image">
