@@ -47,7 +47,10 @@ class CarFactory extends Factory
                 return User::query()->find($attributes['user_id'])->phone;
             },
             'description' => fake()->text(2000),
-            'published_at' => fake()->dateTimeBetween('-1 month', '+1 day')->format('Y-m-d H:i:s'),
+            'published_at' => function(array $attributes) {
+                $fakeDate = fake()->optional(0.9)->dateTimeBetween('-1 month', '+1 day');
+                return $fakeDate?->format('Y-m-d H:i:s');
+            },
             'deleted_at' => null,
         ];
     }

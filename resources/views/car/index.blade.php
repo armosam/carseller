@@ -29,7 +29,7 @@
                                         />
                                     </td>
                                     <td>{{$car->year}} - {{$car->maker->name}} {{$car->model->name}}</td>
-                                    <td>{{ $car->getFormattedDate('created_at11') }}</td>
+                                    <td>{{ $car->getFormattedDate('created_at') }}</td>
                                     <td>{{$car->published_at ? 'Yes': 'No'}}</td>
                                     <td class="">
                                         <a

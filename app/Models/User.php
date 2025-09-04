@@ -54,6 +54,11 @@ class User extends Authenticatable
         ];
     }
 
+    /** Returns full name of user */
+    public function fullName(): string {
+        return sprintf('%s %s', $this->first_name, $this->last_name);
+    }
+
     public function cars(): HasMany {
         return $this->hasMany(Car::class, 'user_id', 'id');
     }

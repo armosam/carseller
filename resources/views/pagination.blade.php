@@ -20,7 +20,7 @@
 
         @foreach($elements as $element)
             @if(is_string($element))
-                {{$element}}
+                    <span class="pagination-item">{{$element}}</span>
             @endif
 
             @if (is_array($element))

@@ -39,7 +39,7 @@ class CarController extends Controller
         return redirect()->away('https://littlebeeline.com', 301);*/
 
 
-        // TODO Fix this hardcoded user to be for auth user
+        // It gets first authenticated user, then returns cars of that user
         $cars = User::query()->find(Auth::id())
             ->cars()
             ->with(['maker', 'model', 'primaryImage'])
@@ -179,7 +179,7 @@ class CarController extends Controller
         /*// JOINS
         $query->join('cities', 'cars.city_id', '=', 'cities.id')
             ->where('cities.state_id', '=', 15);
-        // If you are joining to some table for some reason then it make sense to add columns in the select and not doing eager loading
+        // If you are joining to some table for some reason then it make sense to add columns in the select rather than doing eager loading
         $query->select('cars.*', 'cities.name as cityName');
 
         $query->join('car_images', function (JoinClause $join) {
@@ -200,9 +200,15 @@ class CarController extends Controller
         $query->orWhereBetween('year', [2000, 2005]);
         $query->whereNotBetween('year', [2022, 2023]);
 
+        $query->whereNull('year');
+        $query->orWhereNull('year');
         $query->whereNotNull('year');
+        $query->orWhereNotNull('year');
 
         $query->whereIn('year', [2010, 2024]);
+        $query->orWhereIn('year', [2010, 2024]);
+        $query->whereNotIn('year', [2010, 2024]);
+        $query->orWhereNotIn('year', [2010, 2024]);
         $usersQuery = User::query()->select('users.id')->whereNotNull('google_id');
         $query->whereIn('user_id', $usersQuery);
 
@@ -220,11 +226,14 @@ class CarController extends Controller
         ]);
 
         $query->whereBetweenColumns('column1', ['min_allowed_value', 'max_allowed_value']);
+        $query->orWhereBetweenColumns('column1', ['min_allowed_value', 'max_allowed_value']);
         $query->whereNotBetweenColumns('column1', ['min_allowed_value', 'max_allowed_value']);
+        $query->orWhereNotBetweenColumns('column1', ['min_allowed_value', 'max_allowed_value']);
 
         $query->whereFullText('description', 'BMW');
 
         // Grouping AND, OR parts
+        // select * from cars where price > 5000 and (year > 2010 or year < 2015);
         $query->where('price', '>', 5000)
             ->where( function(Builder $query) {
                 $query->where('year', '>', '2010')
@@ -261,6 +270,26 @@ class CarController extends Controller
             $query->selectRaw('AVG(price) as avg_price')->from('cars');
         });
 
+        // Associate a new car type to the car
+        $car = Car::find(1)->first();
+        $carTypeHatchback = CarType::where('name', 'Hatchback')->first();
+        $car->carType()->associate($carTypeHatchback);
+        $car->save();
+
+        // Manage many to many pivot table
+        $user = User::find(1);
+        // Adds many to many connection in the pivot table
+        $user->favoriteCars->attache([1,2], ['column1' => 'value1']);
+
+        // Removes all connections from pivot table and adds new connections
+        $user->favoriteCars->sync([1,2]);
+        $user->favoriteCars->syncWithPivotValues([1,2], ['column1' => 'value1']);
+
+        // Removes given connections and if not provided then removes all
+        $user->favoriteCars->detach([1,2]);
+        $user->favoriteCars->detach();
+
+
         $query->dump();
         $query->dd();
         $query->toSql();
@@ -277,8 +306,8 @@ class CarController extends Controller
      */
     public function watchlist(): View
     {
-        // TODO Fix this hard coded
-        $cars = User::query()->find(5)
+        // Find favorite cars of authenticated user
+        $cars = User::query()->find(Auth::id())
             ->favoriteCars()
             ->with(['maker', 'model', 'primaryImage', 'city.state', 'carType', 'fuelType'])
             ->orderBy('created_at', 'desc')

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
  */
 class MakerFactory extends Factory
 {
+    // In case Model name and Factory name does not match
     // protected $model = Maker::class;
 
     /**

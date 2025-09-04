@@ -14,7 +14,7 @@ class Maker extends EloquentModel
 
     protected $fillable = ['name'];
 
-
+    // In case Model name and Factory name does not match
     /*protected static function newFactory()
     {
         return CustomMakerFactory::new();

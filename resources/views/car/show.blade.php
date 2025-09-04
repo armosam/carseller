@@ -150,8 +150,8 @@
                             class="car-details-owner-image"
                         />
                         <div>
-                            <h3 class="car-details-owner">{{$car->owner->name}}John Smith</h3>
-                            <div class="text-muted">{{$car->owner->cars()->count()}} cars</div>
+                            <h3 class="car-details-owner">{{$car->owner->fullName()}}</h3>
+                            <div class="text-muted">Owns {{$car->owner->cars()->count()}} cars</div>
                         </div>
                     </div>
                     <a href="tel:{{Str::mask($car->phone, '*', -3)}}" class="car-details-phone">

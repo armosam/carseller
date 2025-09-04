@@ -14,6 +14,8 @@ use Illuminate\Support\Carbon;
 class Car extends EloquentModel
 {
     use HasFactory;
+
+    // When calling delete on model then instead of removing record, it will update record and set deleted_at column.
     use SoftDeletes;
 
     protected $fillable = [
