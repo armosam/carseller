@@ -30,9 +30,9 @@ class CarFactory extends Factory
                 return Model::query()->where('maker_id', $attributes['maker_id'])->inRandomOrder()->firstOrFail()->id;
             },
             'year' => fake()->year(),
-            'price' => (int)fake()->randomFloat(2, 5, 100) * 1000,
+            'price' => (int)fake()->randomFloat(2, 2, 100) * 1000,
             'vin' => strtoupper(Str::random(17)),
-            'mileage' => (int)fake()->randomFloat(2, 5, 500) * 1000,
+            'mileage' => (int)fake()->randomFloat(2, 1, 350) * 1000,
             'interior_color' => fake()->colorName(),
             'exterior_color' => fake()->colorName(),
             'car_type_id' => CarType::query()->inRandomOrder()->first()->id,

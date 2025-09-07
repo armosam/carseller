@@ -39,6 +39,26 @@ class CarController extends Controller
         return redirect()->away('https://littlebeeline.com', 301);*/
 
 
+        /*// Associate a new car type to the car
+        $car = Car::find(1)->first();
+        $carTypeHatchback = CarType::where('name', 'Hatchback')->first();
+        $car->carType()->associate($carTypeHatchback);
+        $car->save();
+
+        // Manage many-to-many pivot table
+        $user = User::find(1);
+        // Adds many to many connection in the pivot table
+        $user->favoriteCars->attache([1,2], ['column1' => 'value1']);
+
+        // Removes all connections from pivot table and adds new connections
+        $user->favoriteCars->sync([1,2]);
+        $user->favoriteCars->syncWithPivotValues([1,2], ['column1' => 'value1']);
+
+        // Removes given connections and if not provided then removes all
+        $user->favoriteCars->detach([1,2]);
+        $user->favoriteCars->detach();*/
+
+
         // It gets first authenticated user, then returns cars of that user
         $cars = User::query()->find(Auth::id())
             ->cars()
@@ -84,24 +104,7 @@ class CarController extends Controller
      */
     public function show(Request $request, Car $car): View
     {
-        /*dump($request->path());
-        dump($request->url());
-        dump($request->fullUrl());
-        dump($request->method());
-        dump($request->isMethod('post'));
-        dump($request->isXmlHttpRequest());
-        dump($request->is('car/*'));
-        dump($request->routeIs('car.*'));
-        dump($request->expectsJson());
-        dump($request->fullUrlWithQuery(['sort' => 'price']));
 
-        dump($request->fullUrlWithoutQuery(['sort']));
-        dump($request->host());
-        dump($request->httpHost());
-        dump($request->schemeAndHttpHost());
-        dump($request->header());
-        dump($request->bearerToken());
-        dump($request->ip());*/
 
         return view('car.show', ['car' => $car]);
     }
@@ -157,24 +160,111 @@ class CarController extends Controller
     /**
      * Search record
      */
-    public function search(): View
+    public function search(Request $request): View
     {
+        $maker = $request->integer('maker_id');
+        $model = $request->integer('model_id');
+        $state = $request->integer('state_id');
+        $city = $request->integer('city_id');
+        $car_type = $request->integer('car_type_id');
+        $fuel_type = $request->integer('fuel_type_id');
+        $year_from = $request->integer('year_from');
+        $year_to = $request->integer('year_to');
+        $price_from = $request->float('price_from');
+        $price_to = $request->float('price_to');
+        $mileage = $request->integer('mileage');
+
+        $sort = $request->input('sort', '-published_at');
+
         $query = Car::query()
             ->with(['maker', 'model', 'primaryImage', 'city' => ['state'], 'carType', 'fuelType'])
-            ->where('published_at', '<', now())
-            ->orderBy('published_at', 'desc')
-            ->orderBy('price', 'desc');
-            //or
-//        $query = Car::query()
-//            ->with(['maker', 'model', 'primaryImage', 'city' => ['state'], 'carType', 'fuelType'])
-//            ->where('published_at', '<', now())
-//            ->latest('published_at')
-//            ->oldest('price');
+            ->where('published_at', '<', now());
 
+
+        if ($maker) {
+            $query->where('maker_id', $maker);
+        }
+        if ($model) {
+            $query->where('model_id', $model);
+        }
+        if ($state) {
+            $query->join('cities', 'cities.id', '=', 'cars.city_id')
+                ->where('cities.state_id', $state);
+        }
+        if ($city) {
+            $query->where('city_id', $city);
+        }
+        if ($car_type) {
+            $query->where('car_type_id', $car_type);
+        }
+        if ($fuel_type) {
+            $query->where('fuel_type_id', $fuel_type);
+        }
+        if ($year_from) {
+            $query->where('year', '>=', $year_from);
+        }
+        if ($year_to) {
+            $query->where('year', '<=', $year_to);
+        }
+        if ($price_from) {
+            $query->where('price', '>=', $price_from);
+        }
+        if ($price_to) {
+            $query->where('price', '<=', $price_to);
+        }
+        if ($mileage) {
+            $query->where('mileage', '<=', $mileage);
+        }
+
+        if (str_starts_with($sort, '-')) {
+            $sort = substr($sort, 1);
+            $query->orderBy($sort, 'desc');
+        } else {
+            $query->orderBy($sort);
+        }
+
+        /*
         $query->reorder() // Removes ordering
               ->orderBy('price', 'desc');  //Adds a new ordering
+        // Removes ordering and adds new one
+        $query->reorder('price');
+        */
 
-        $query->reorder('price'); // Removes ordering and adds new one
+
+        /*// REQUEST
+        dump($request->all());
+        dump($request->only(['price_from', 'price_to']));
+        dump($request->except(['price_from', 'price_to']));
+        dump($request->get('price_from', 0.00));
+        dump($request->post('price_from', 0.00));
+        dump($request->input('year_from', 0.00));
+        dump($request->query('maker_id', 111));
+        dump($request->has('maker_id'));
+        dump($request->filled('maker_id'));
+        dump($request->integer('maker_id'));
+        dump($request->float('price_from'));
+        dump($request->boolean('published'));
+        dump($request->date('published_at'));
+        dump($request->file('image'));
+
+        dump($request->path());
+        dump($request->url());
+        dump($request->fullUrl());
+        dump($request->method());
+        dump($request->isMethod('post'));
+        dump($request->isXmlHttpRequest());
+        dump($request->is('car/*'));
+        dump($request->routeIs('car.*'));
+        dump($request->expectsJson());
+        dump($request->fullUrlWithQuery(['sort' => 'price']));
+
+        dump($request->fullUrlWithoutQuery(['sort']));
+        dump($request->host());
+        dump($request->httpHost());
+        dump($request->schemeAndHttpHost());
+        dump($request->header());
+        dump($request->bearerToken());
+        dump($request->ip());*/
 
         /*// JOINS
         $query->join('cities', 'cars.city_id', '=', 'cities.id')
@@ -270,32 +360,14 @@ class CarController extends Controller
             $query->selectRaw('AVG(price) as avg_price')->from('cars');
         });
 
-        // Associate a new car type to the car
-        $car = Car::find(1)->first();
-        $carTypeHatchback = CarType::where('name', 'Hatchback')->first();
-        $car->carType()->associate($carTypeHatchback);
-        $car->save();
-
-        // Manage many to many pivot table
-        $user = User::find(1);
-        // Adds many to many connection in the pivot table
-        $user->favoriteCars->attache([1,2], ['column1' => 'value1']);
-
-        // Removes all connections from pivot table and adds new connections
-        $user->favoriteCars->sync([1,2]);
-        $user->favoriteCars->syncWithPivotValues([1,2], ['column1' => 'value1']);
-
-        // Removes given connections and if not provided then removes all
-        $user->favoriteCars->detach([1,2]);
-        $user->favoriteCars->detach();
-
 
         $query->dump();
         $query->dd();
         $query->toSql();
         $query->ddRawSql();*/
 
-        $cars = $query->paginate(15);
+        $cars = $query->paginate(15)
+            ->withQueryString();
 
         return view('car.search', ['cars' => $cars]);
     }

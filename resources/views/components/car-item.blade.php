@@ -3,7 +3,7 @@
 <div class="car-item card">
     <a href="{{ route('car.show', $car) }}">
         <img
-            src="{{$car->primaryImage->image_path}}"
+            src="{{$car->primaryImage?->image_path}}"
             alt=""
             class="car-item-img rounded-t"
         />
@@ -11,7 +11,7 @@
 
     <div class="p-medium">
         <div class="flex items-center justify-between">
-            <small class="m-0 text-muted">{{$car->city->state->name}}</small>
+            <small class="m-0 text-muted">{{$car->city->name}}, {{$car->city->state->name}}</small>
             <button class="btn-heart text-primary">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -48,6 +48,7 @@
         <p class="m-0">
             <span class="car-item-badge">{{$car->carType->name}}</span>
             <span class="car-item-badge">{{$car->fuelType->name}}</span>
+            <span class="car-item-badge">{{$car->mileage}}m</span>
         </p>
     </div>
 </div>
