@@ -66,6 +66,26 @@ class CarController extends Controller
         $user->favoriteCars->detach();*/
 
 
+        /*// Sessions
+        $request = request();
+        $request->session()->pull('user', 'Laravel User');
+        session(['user' => 'Laravel Simple User']);
+
+        // $user = $request->session()->get('user', 'Default User');
+        $user = session('user', 'Default User');
+        $all = $request->session()->all();
+
+        $request->session()->forget('user');
+        $user = $request->session()->remove('user');
+
+        dump($all, $user);*/
+
+        /*// Keep all flash message sessions
+        request()->session()->reflash();
+        // Keep only success message session
+        request()->session()->keep(['success']);*/
+
+
         // It gets first authenticated user, then returns cars of that user
         $cars = User::query()->find(Auth::id())
             ->cars()
@@ -82,7 +102,7 @@ class CarController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         return view('car.create');
     }
@@ -173,7 +193,7 @@ class CarController extends Controller
         // Adding queue job to send an email
         Mail::to(Auth::user())->queue(new CarAdded($newCar));
 
-        return to_route('car.show', ['car' => $newCar]);
+        return to_route('car.show', ['car' => $newCar])->with('success', 'Car created.');
     }
 
     /**
@@ -184,6 +204,9 @@ class CarController extends Controller
         if (empty($car->published_at)) {
             abort(404);
         }
+
+        // get session message
+        // $message = $request->session()->get('success');
 
         return view('car.show', ['car' => $car]);
     }
@@ -242,7 +265,10 @@ class CarController extends Controller
 
         $car->features()->update($featuresAttributes);
 
-        return to_route('car.show', ['car' => $car]);
+        // Set flash message
+        //$request->session()->flash('success', 'Car was updated');
+
+        return to_route('car.show', ['car' => $car])->with('success', 'Car updated.');
     }
 
     /**
@@ -252,7 +278,7 @@ class CarController extends Controller
     {
         $car->delete();
 
-        return to_route('car.index');
+        return to_route('car.index')->with('success', 'Car deleted.');
     }
 
     public function carImages (Car $car): View
@@ -278,7 +304,7 @@ class CarController extends Controller
             $car->images()->create(['image_path' => $image->store('images'), 'position' => ++$position]);
         }
 
-        return to_route('car.images', ['car' => $car]);
+        return to_route('car.images', ['car' => $car])->with('success', 'Images added.');
     }
 
     public function updateImages (Request $request, Car $car)
@@ -308,7 +334,7 @@ class CarController extends Controller
         // Delete images from database
         $car->images()->whereIn('id', $deleteImages)->delete();
 
-        return to_route('car.images', ['car' => $car]);
+        return to_route('car.images', ['car' => $car])->with('success', 'Images updated.');
     }
 
     /**
