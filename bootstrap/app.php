@@ -11,7 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Disable CSRF validation for mentioned paths
+        $middleware->validateCsrfTokens(except: [
+            'stripe/*'
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

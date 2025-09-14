@@ -3,9 +3,9 @@
 <div class="car-item card">
     <a href="{{ route('car.show', $car) }}">
         <img
-            src="{{$car->primaryImage?->image_path}}"
+            src="{{$car->primaryImage?->getUrl() ?: '/img/no_image.png'}}"
             alt=""
-            class="car-item-img rounded-t"
+            class="car-item-img rounded-t items-center"
         />
     </a>
 
@@ -42,7 +42,7 @@
                 </svg>
             </button>
         </div>
-        <h2 class="car-item-title">{{$car->year}} - {{$car->maker->name}} {{$car->model->name}}</h2>
+        <h2 class="car-item-title">{{$car->getTitle()}}</h2>
         <p class="car-item-price">${{$car->price}}</p>
         <hr />
         <p class="m-0">

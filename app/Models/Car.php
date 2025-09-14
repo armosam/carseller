@@ -53,7 +53,7 @@ class Car extends EloquentModel
     }
 
     public function images(): HasMany {
-        return $this->hasMany(CarImage::class, 'car_id', 'id');
+        return $this->hasMany(CarImage::class, 'car_id', 'id')->orderBy('position');
     }
 
     public function carType (): BelongsTo
@@ -104,5 +104,10 @@ class Car extends EloquentModel
             return Carbon::parse($this->{$column_name})->format($format);
         }
         return (new Carbon())->format($format);
+    }
+
+    public function getTitle(): string
+    {
+        return $this->year . ' - ' . $this->maker->name . ' ' . $this->model->name;
     }
 }

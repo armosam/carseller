@@ -29,7 +29,7 @@ class CarFactory extends Factory
             'model_id' => function(array $attributes) {
                 return Model::query()->where('maker_id', $attributes['maker_id'])->inRandomOrder()->firstOrFail()->id;
             },
-            'year' => fake()->year(),
+            'year' => fake()->dateTimeBetween('-28 years')->format('Y'),
             'price' => (int)fake()->randomFloat(2, 2, 100) * 1000,
             'vin' => strtoupper(Str::random(17)),
             'mileage' => (int)fake()->randomFloat(2, 1, 350) * 1000,

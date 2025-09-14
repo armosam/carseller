@@ -11,18 +11,16 @@
                 <div class="car-images-and-description">
                     <div class="car-images-carousel">
                         <div class="car-image-wrapper">
-                            @if(!empty($car->primaryImage->image_path))
-                                <img
-                                    src="{{$car->primaryImage->image_path}}"
-                                    alt=""
-                                    class="car-active-image"
-                                    id="activeImage"
-                                />
-                            @endif
+                            <img
+                                src="{{$car->primaryImage?->getUrl() ?: '/img/no_image.png'}}"
+                                alt=""
+                                class="car-active-image items-stretch"
+                                id="activeImage"
+                            />
                         </div>
                         <div class="car-image-thumbnails">
                             @foreach($car->images as $image)
-                                <img src="{{$image->image_path}}" alt=""/>
+                                <img src="{{$image->getUrl()}}" alt="{{$image->position}}"/>
                             @endforeach
                         </div>
                         <button class="carousel-button prev-button" id="prevButton">

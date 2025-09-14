@@ -38,6 +38,12 @@ Route::controller(CarController::class)->prefix('car')->group(function () {
         ->can('update', 'car');
     Route::delete('/{car}', 'destroy')->name('car.destroy')->middleware('auth')
         ->can('delete', 'car');
+    Route::get('/{car}/images', 'carImages')->name('car.images')->middleware('auth')
+        ->can('update','car');
+    Route::post('/{car}/images', 'addImages')->name('car.addImages')->middleware('auth')
+        ->can('update','car');
+    Route::addRoute(['PUT','PATCH'],'/{car}/images', 'updateImages')->name('car.updateImages')->middleware('auth')
+        ->can('update','car');
 });
 
 

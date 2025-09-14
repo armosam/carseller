@@ -3,18 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
+use App\Models\CarFeature;
 use App\Models\CarImage;
 use App\Models\CarType;
 use App\Models\User;
 use App\Mail\CarAdded;
+use App\Rules\PhoneRule;
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
-use App\Http\Requests\Car\StoreRequest;
+use App\Http\Requests\Car\StoreCarRequest;
 use App\Jobs\TranslateJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 use Illuminate\View\View;
 
 class CarController extends Controller
@@ -83,12 +90,82 @@ class CarController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreRequest $request)
+    public function store(StoreCarRequest $request)
     {
+        $images = $request->file('images') ?: [];
+        $data = $request->all();
+        $featureAttributes = $data['features'] ?? [];
         $attributes = $request->validated();
-        //$attributes = $request->safe()->only(['maker_id', 'year', 'vin']);
+
+        /*// Simply use rules to validate each field
+        $attributes = $request->validated([
+            'maker_id' => 'required',
+            'model_id' => 'required',
+            'year' => ['required', 'integer', 'min:2000', 'max:'.date('Y')],
+            //'phone' => 'required|string|min:10'
+            //'phone' => new PhoneRule(),
+            'phone' => function (string $attribute, mixed $value, Closure $fail) {
+                if (!is_numeric($value) || strlen($value) !== 11) {
+                    $fail("The :attribute must be 11 characters.");
+                    //$fail("The {$attribute} must be 10 characters.");
+                }
+            },
+            'features' => 'array',
+            'features.*' => 'string',
+            'images' => 'array',
+            //'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:4096', // Simple way or
+            'images.*' => File::image()
+                ->min(10)
+                ->max(4096)
+                ->dimensions(Rule::dimensions()->maxWidth(1024)->maxHeight(768))
+        ], [ // Custom validation messages
+            'required' => 'Please enter the :attribute.',
+            'maker_id.required' => 'Please enter the maker.',
+        ], [ // attribute names
+            'maker_id' => 'Make Name',
+            'model_id' => 'Model Name'
+        ]);
+
+        // Create custom and specific validator
+        $validator = Validator::make($request->all(), [
+            'maker_id' => 'required',
+            'model_id' => 'required',
+            'year' => ['required', 'integer', 'min:2000', 'max:'.date('Y')],
+        ], [
+            'required' => 'Please enter the :attribute.',
+            'maker_id.required' => 'Please enter the maker.',
+        ], [
+            'maker_id' => 'Make Name',
+            'model_id' => 'Model Name'
+        ]);
+        // or
+        $validator = Validator::make($request->all(), [
+            'maker_id' => Rule::requiredIf(fn() => $request->year == 2020)
+        ]);
+
+        if($validator->fails()) {
+            // Redirect, log ... etc. validation errors
+            return redirect(route('car.create'))
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Access to the validated data
+        $attributes = $validator->validated();
+        $attributes = $request->safe()->only(['maker_id', 'year', 'vin']);
+        $attributes = $request->safe()->except(['year', 'vin']);
+        $attributes = $request->safe()->merge(['user_id', Auth->id()]);
+        */
 
         $newCar = Car::query()->create($attributes);
+        $newCar->features()->create($featureAttributes);
+
+        foreach ($images as $position => $image) {
+            if($image->isFile() && $image->isReadable()) {
+                $path = $image->store('images');
+                $newCar->images()->create(['image_path' => $path, 'position' => $position + 1]);
+            }
+        }
 
         // Sending email about car created
         //Mail::to(Auth::user())->send(new CarAdded($newCar));
@@ -104,7 +181,9 @@ class CarController extends Controller
      */
     public function show(Request $request, Car $car): View
     {
-
+        if (empty($car->published_at)) {
+            abort(404);
+        }
 
         return view('car.show', ['car' => $car]);
     }
@@ -144,9 +223,26 @@ class CarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreRequest $request, Car $car)
+    public function update(StoreCarRequest $request, Car $car)
     {
-        //
+        $attributes = $request->validated();
+        $featuresAttributes = $attributes['features'] ?? [];
+
+        $car->update($attributes);
+
+        // Because checkboxes returning only checked values as '1'
+        // we need to collect a feature list with 0 values and
+        // merge it with received from form features
+        // Get all feature names
+        $allFeatures = array_keys(CarFeature::featuresList());
+        // Reset values of all features to 0
+        $allFeatures = array_fill_keys($allFeatures, 0);
+        // Merge received features to feature list with 0 values
+        $featuresAttributes = array_merge($allFeatures, $featuresAttributes);
+
+        $car->features()->update($featuresAttributes);
+
+        return to_route('car.show', ['car' => $car]);
     }
 
     /**
@@ -154,7 +250,65 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
-        //
+        $car->delete();
+
+        return to_route('car.index');
+    }
+
+    public function carImages (Car $car): View
+    {
+        return view('car.images', ['car' => $car]);
+    }
+
+    public function addImages(Request $request, Car $car)
+    {
+        $request->validate([
+            'images' => 'array',
+            //'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:4096', // Simple way or
+            'images.*' => File::image()
+                ->extensions('jpeg,png,jpg,gif,svg')
+                ->max(config('image.max_size'))
+                //->dimensions(Rule::dimensions()->maxWidth(config('image.max_width'))->maxHeight(config('image.max_height')))
+        ]);
+
+        $images = $request->file('images') ?? [];
+        $position = $car->images()->max('position') ?? 0;
+
+        foreach ($images as $image) {
+            $car->images()->create(['image_path' => $image->store('images'), 'position' => ++$position]);
+        }
+
+        return to_route('car.images', ['car' => $car]);
+    }
+
+    public function updateImages (Request $request, Car $car)
+    {
+        $data = $request->validate([
+            'delete_images' => 'array',
+            'delete_images.*' => 'integer|exists:car_images,id',
+            'positions' => 'array',
+            'positions.*' => 'integer',
+        ]);
+
+        $deleteImages = $data['delete_images'] ?? [];
+        $positions = $data['positions'] ?? [];
+
+        // Update positions of Images
+        foreach ($positions as $imageId => $position) {
+            $car->images()->where('id', $imageId)->update(['position' => $position]);
+        }
+
+        // Delete images from file storage
+        $imagesToDelete = $car->images()->whereIn('id', $deleteImages)->get();
+        foreach ($imagesToDelete as $image) {
+            if (Storage::exists($image->image_path)) {
+                Storage::delete($image->image_path);
+            }
+        }
+        // Delete images from database
+        $car->images()->whereIn('id', $deleteImages)->delete();
+
+        return to_route('car.images', ['car' => $car]);
     }
 
     /**

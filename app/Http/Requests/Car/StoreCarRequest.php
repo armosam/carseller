@@ -4,9 +4,17 @@ namespace App\Http\Requests\Car;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use App\Rules\PhoneRule;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
-class StoreRequest extends FormRequest
+class StoreCarRequest extends FormRequest
 {
+    /*protected $stopOnFirstFailure = true;
+    protected $redirect = '/';
+    protected $redirectRoute = 'car.index';*/
+
     /**
      * Get custom attributes for validator errors.
      *
@@ -36,6 +44,40 @@ class StoreRequest extends FormRequest
             'updated_at' => 'Updated At',
             'deleted_at' => 'Deleted At'
         ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            //'required' => ':attribute is required.',
+            'maker_id.required' => ':attribute is required.',
+            'maker_id.integer' => ':attribute must be an integer.',
+            'vin.required' => ':attribute is required.',
+        ];
+    }
+
+    /**
+     * Prepares, converts data before validation
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'vin' => strtoupper($this->vin),
+            'user_id' => Auth::id()
+        ]);
+    }
+
+    /**
+     * Prepares, converts, adds a data to payload after validation passed
+     * @return void
+     */
+    protected function passedValidation(): void
+    {
+        $this->merge([
+            'vin' => strtoupper($this->vin),
+            'user_id' => Auth::id()
+        ]);
     }
 
     /**
@@ -68,7 +110,18 @@ class StoreRequest extends FormRequest
             'state_id' => ['required', 'integer', 'exists:App\Models\State,id'],
             'city_id' => ['required', 'integer', 'exists:App\Models\City,id'],
             'address' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:10'],
+            //'phone' => ['required', 'string', 'max:10'],
+            'phone' => new PhoneRule(), // Custom rule
+
+            'features' => 'array',
+            'features.*' => 'string',
+            'images' => 'array',
+            'images.*' => File::image()
+                ->max(config('image.max_size')),
+                /*->dimensions(Rule::dimensions()
+                    ->maxWidth(config('image.max_width'))
+                    ->maxHeight(config('image.max_height'))
+                ),*/
 
             'description' => ['nullable', 'string', 'max:255'],
             'published_at' => ['nullable', 'date'],
