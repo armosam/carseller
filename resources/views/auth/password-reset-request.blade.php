@@ -1,11 +1,10 @@
 <x-auth-layout title="Password Reset" bodyClass="page-login">
-    <form action="" method="post">
+    <form action="{{route('password.storeResetRequest')}}" method="post">
         @csrf
 
-        <x-form.input type="password" name="password" placeholder="New Password" autocomplete="off" />
-        <x-form.input type="password" name="password_confirmation" placeholder="Confirm Password" autocomplete="off" />
+        <x-form.input type="email" name="email" :value="old('email')" placeholder="Your Email" />
 
-        <button class="btn btn-primary btn-login w-full">Set New Password</button>
+        <button class="btn btn-primary btn-login w-full">Reset Password</button>
 
     </form>
 

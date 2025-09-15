@@ -15,7 +15,7 @@ class PhoneRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!is_numeric($value) || strlen($value) !== 11) {
+        if (empty($value) || !is_numeric($value) || strlen($value) !== 11) {
             $fail("The :attribute must be 11 numeric characters.");
             //$fail("The {$attribute} must be 10 characters.");
         }

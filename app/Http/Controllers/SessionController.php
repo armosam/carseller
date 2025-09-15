@@ -7,6 +7,8 @@ use App\Http\Requests\Session\LoginRequest;
 use App\Http\Requests\Session\RegistrationRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 use Illuminate\Validation\ValidationException;
 
 class SessionController extends Controller
@@ -16,8 +18,10 @@ class SessionController extends Controller
      */
     public function signup()
     {
+        Auth::logout();
         return view('auth.signup');
     }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -27,13 +31,16 @@ class SessionController extends Controller
         $user = User::query()->create($attributes);
         // Send email verification message. It logs user in directly now.
         Auth::login($user);
-        return redirect()->route('home');
+        return redirect()->route('home')->with('success', 'Account created successfully');
     }
     /**
      * Open login form
      */
     public function login()
     {
+        if (Auth::check()) {
+            return redirect()->route('car.index');
+        }
         return view('auth.login');
     }
 
@@ -41,26 +48,34 @@ class SessionController extends Controller
      * Authenticate user input and login the user
      * @param LoginRequest $request
      * @return RedirectResponse
-     * @throws ValidationException
      */
     public function authentication(LoginRequest $request)
     {
         $attributes = $request->validated();
 
         if (!Auth::attempt($attributes)) {
-            throw ValidationException::withMessages([
+            /*throw ValidationException::withMessages([
                 'email' => 'User credentials do not match our records.'
-            ]);
+            ]);*/
+            return redirect()->back()->withErrors([
+                'email' => 'User credentials do not match our records'
+            ])->onlyInput('email');
         }
 
         $request->session()->regenerate();
 
-        return redirect()->intended();
+        return redirect()->intended('car')->with('success', 'Welcome back');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
+
+        // Regenerate session
+        $request->session()->regenerate();
+        // Regenerate csrf token
+        $request->session()->regenerateToken();
+
         return redirect()->route('home');
     }
 }

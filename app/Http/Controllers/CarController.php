@@ -87,7 +87,9 @@ class CarController extends Controller
 
 
         // It gets first authenticated user, then returns cars of that user
-        $cars = User::query()->find(Auth::id())
+        //$cars = User::query()->find(Auth::id())
+        //$cars = request()->user()
+        $cars = Auth::user()
             ->cars()
             ->with(['maker', 'model', 'primaryImage'])
             ->orderBy('created_at', 'desc')
@@ -559,7 +561,7 @@ class CarController extends Controller
     public function watchlist(): View
     {
         // Find favorite cars of authenticated user
-        $cars = User::query()->find(Auth::id())
+        $cars = Auth::user()
             ->favoriteCars()
             ->with(['maker', 'model', 'primaryImage', 'city.state', 'carType', 'fuelType'])
             ->orderBy('created_at', 'desc')

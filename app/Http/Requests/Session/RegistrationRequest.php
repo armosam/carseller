@@ -29,7 +29,7 @@ class RegistrationRequest extends FormRequest
             'password' => ['required', 'confirmed', Password::defaults()],
             'first_name' => ['required', 'string:max:100'],
             'last_name' => ['required', 'string:max:100'],
-            'phone' => ['string', 'min:10', 'max:15', 'nullable'],
+            'phone' => ['string', 'min:10', 'max:11', 'nullable'],
         ];
     }
 }

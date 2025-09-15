@@ -11,10 +11,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::view('about', 'about')->name('about');
 
 Route::controller(AuthController::class)->prefix('auth')->group(function () {
-    Route::get('/password-reset', 'passwordReset')->name('password.reset');
-    Route::post('/password-reset', 'storePasswordReset');
-    Route::get('/set-password', 'setPassword')->name('password.set');
-    Route::post('/set-password', 'storePassword');
+    Route::get('/password-reset-request', 'passwordResetRequest')->name('password.resetRequest');
+    Route::post('/store-password-reset', 'storePasswordReset')->name('password.storeResetRequest');
+    Route::get('/password-reset/{token}', 'passwordReset')->name('password.reset');
+    Route::post('/store-password', 'storePassword')->name('password.store');
 })->middleware('guest');
 
 Route::controller(SessionController::class)->prefix('auth')->group(function () {
@@ -61,4 +61,4 @@ Route::prefix('admin')->group(function () {
 });
 
 
-Route::fallback(ErrorController::class);
+//Route::fallback(ErrorController::class);

@@ -27,4 +27,11 @@ class PasswordResetRequest extends FormRequest
             'email' => ['required', 'email', 'exists:App\Models\User,email'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'email.exists' => 'Provided :attribute is not allowed.',
+        ];
+    }
 }

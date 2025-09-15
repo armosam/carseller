@@ -6,7 +6,7 @@
         <x-form.input type="password" name="password" placeholder="Your Password" autocomplete="off" />
 
         <div class="text-right mb-medium">
-            <a href="{{ route('password.reset') }}" class="auth-page-password-reset">Reset Password</a>
+            <a href="{{ route('password.resetRequest') }}" class="auth-page-password-reset">Reset Password</a>
         </div>
 
         <button class="btn btn-primary btn-login w-full">Login</button>

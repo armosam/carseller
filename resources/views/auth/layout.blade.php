@@ -11,6 +11,14 @@
                     </div>
                     <h1 class="auth-page-title">{{$title}}</h1>
 
+                    @session('success')
+                        <div class="container my-large">
+                            <div class="success-message">
+                                {{ session('success') }}
+                            </div>
+                        </div>
+                    @endsession
+
                     {{$slot}}
 
                     @if($socialLogin)

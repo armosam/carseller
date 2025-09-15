@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Auth\Notifications\ResetPassword;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -59,6 +60,12 @@ class AppServiceProvider extends ServiceProvider
                 ? $rule->numbers()->symbols()->mixedCase()->uncompromised()
                 : $rule;
         });
+
+        // Customize the password reset URL when sending email
+        /*ResetPassword::createUrlUsing(function ($notifiable, $token) {
+            // Custom URL format for password reset in the email
+            return url("auth/set-password/$token?email=" . urlencode($notifiable->getEmailForPasswordReset()));
+        });*/
 
         // Car Update authorization rule as Gate
         /*Gate::define('car_update', function (User $user, Car $car) {

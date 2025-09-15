@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Session;
 
+use App\Rules\PasswordResetTokenRule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
@@ -25,7 +26,9 @@ class StorePasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'email' => ['required', 'email', 'exists:password_reset_tokens,email'],
             'password' => ['required', 'confirmed', Password::defaults()],
+            'token' => new PasswordResetTokenRule($this->input('email')),
         ];
     }
 }
