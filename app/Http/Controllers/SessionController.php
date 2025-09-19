@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Requests\Session\LoginRequest;
 use App\Http\Requests\Session\RegistrationRequest;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -29,9 +30,12 @@ class SessionController extends Controller
     {
         $attributes = $request->validated();
         $user = User::query()->create($attributes);
-        // Send email verification message. It logs user in directly now.
-        Auth::login($user);
-        return redirect()->route('home')->with('success', 'Account created successfully');
+
+        // Send email verification message.
+        event(new Registered($user));
+
+        //Auth::login($user);
+        return redirect()->route('home')->with('success', 'Account created successfully. Please check your email to verify your account.');
     }
     /**
      * Open login form
