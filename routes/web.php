@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::view('about', 'about')->name('about');
 
+Route::middleware(['EnsureTodayMonday'])->group(function () {
+    Route::get('/monday-sale', [HomeController::class, 'mondaySale'])->name('home.monday');
+});
+
 Route::controller(AuthController::class)->prefix('auth')->group(function () {
     Route::get('/password-reset-request', 'passwordResetRequest')->name('password.resetRequest');
     Route::post('/store-password-reset', 'storePasswordReset')->name('password.storeResetRequest');

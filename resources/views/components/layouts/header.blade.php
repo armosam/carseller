@@ -20,6 +20,10 @@
             </svg>
         </button>
         <div class="navbar-auth">
+            @if(request('EnsureTodayMonday'))
+                <x-layouts.nav-link href="{{route('home.monday')}}" :active="request()->is('monday-sale')">Monday Sale</x-layouts.nav-link>
+            @endif
+
             <x-layouts.nav-link href="{{route('car.search')}}" :active="request()->is('car/search')">Search</x-layouts.nav-link>
 
             @auth()

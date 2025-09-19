@@ -30,4 +30,8 @@ class HomeController extends Controller
 
         return view('index', ['cars' => $cars]);
     }
+
+    public function mondaySale(): View {
+        return view('monday-sale');
+    }
 }
