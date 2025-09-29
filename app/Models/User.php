@@ -60,6 +60,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return sprintf('%s %s', $this->first_name, $this->last_name);
     }
 
+    /**
+     * Returns true if user is signed by socialite
+     * Otherwise false
+     * @return bool
+     */
+    public function isOauthUser(): bool
+    {
+        return !$this->password;
+    }
+
     public function cars(): HasMany {
         return $this->hasMany(Car::class, 'user_id', 'id');
     }

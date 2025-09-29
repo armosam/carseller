@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="Monday Sale">
     <main>
         <section>
             <div class="container">

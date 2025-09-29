@@ -1,6 +1,6 @@
 @props(['cars']);
 
-<x-app-layout>
+<x-app-layout title="Search Inventory">
     <main>
         <!-- Found Cars -->
         <section>
@@ -15,7 +15,7 @@
                             </svg>
                             Filters
                         </button>
-                        <h2>Define your search criteria</h2>
+                        <h1 class="car-details-page-title">Search Criteria</h1>
                     </div>
 
                     <select class="sort-dropdown">

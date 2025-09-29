@@ -1,7 +1,7 @@
-<x-app-layout>
+<x-app-layout title="Add New Car">
     <main>
         <div class="container-small">
-            <h1 class="car-details-page-title">Add new car</h1>
+            <h1 class="page-title">Add New Car</h1>
             <form
                 action="{{route('car.store')}}"
                 method="POST"

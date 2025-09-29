@@ -1,10 +1,10 @@
 @props(['cars'])
 
-<x-app-layout bodyClass="page-my-cars">
+<x-app-layout title="My Cars" bodyClass="page-my-cars">
     <main>
         <div>
             <div class="container">
-                <h1 class="car-details-page-title">My Cars</h1>
+                <h1 class="page-title">My Cars</h1>
                 <div class="card p-medium">
                     <div class="table-responsive">
                         <table class="table">

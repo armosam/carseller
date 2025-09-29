@@ -1,10 +1,10 @@
 @php use Illuminate\Support\Str; @endphp
 @props(['car'])
 
-<x-app-layout>
+<x-app-layout title="{{$car->getTitle()}}">
     <main>
         <div class="container">
-            <h1 class="car-details-page-title">{{$car->maker->name}} {{$car->model->name}} - {{$car->year}}</h1>
+            <h1 class="car-details-page-title">{{$car->getTitle()}}</h1>
             <div class="car-details-region">{{$car->city->state->name}} - {{$car->published_at}}</div>
 
             <div class="car-details-content">

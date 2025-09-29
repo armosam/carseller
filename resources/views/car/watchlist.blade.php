@@ -1,12 +1,12 @@
 @props(['cars'])
 
-<x-app-layout>
+<x-app-layout title="Favorite Cars">
     <main>
         <!-- New Cars -->
         <section>
             <div class="container">
                 <div class="flex justify-between items-center">
-                    <h2>My Favourite Cars</h2>
+                    <h1 class="page-title">My Favourite Cars</h1>
                     @if($cars->total() > 0)
                         <div class="pagination-summary">
                             <p>

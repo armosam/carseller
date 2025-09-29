@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout title="About Us">
     <main>
         <section>
             <div class="container">

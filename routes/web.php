@@ -5,6 +5,7 @@ use App\Http\Controllers\CarController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\ErrorController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SocialiteController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,12 @@ Route::controller(SessionController::class)->prefix('auth')->group(function () {
         Route::get('/login', 'login')->name('login');
         Route::post('/login', 'authentication');
     });
+});
+
+Route::controller(ProfileController::class)->prefix('profile')->group(function () {
+   Route::get('/', 'index')->name('profile.index')->middleware('auth');
+   Route::put('/', 'update')->name('profile.update')->middleware('auth');
+   Route::put('/password', 'updatePassword')->name('profile.updatePassword')->middleware('auth');
 });
 
 Route::controller(SocialiteController::class)->group(function () {

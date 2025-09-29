@@ -1,10 +1,10 @@
 @props(['cars'])
 
-<x-app-layout bodyClass="page-my-cars">
+<x-app-layout title="Manage Images for {{$car->getTitle()}}" bodyClass="page-my-cars">
     <main>
         <div>
             <div class="container">
-                <h1 class="car-details-page-title">Manage Images for {{$car->getTitle()}}</h1>
+                <h1 class="page-title">Manage Images for {{$car->getTitle()}}</h1>
                 <div class="car-images-wrapper">
                     <form method="POST" action="{{route('car.updateImages', $car)}}" class="card p-medium form-update-images">
                         @csrf

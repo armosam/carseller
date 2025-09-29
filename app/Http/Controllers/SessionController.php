@@ -68,7 +68,7 @@ class SessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended('car')->with('success', 'Welcome back');
+        return redirect()->intended('car')->with('success', 'Welcome back ' . Auth::user()->fullName());
     }
 
     public function logout(Request $request)

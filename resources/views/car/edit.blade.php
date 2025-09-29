@@ -1,7 +1,7 @@
-<x-app-layout>
+<x-app-layout title="Edit Car {{$car->getTitle()}}">
     <main>
         <div class="container-small">
-            <h1 class="car-details-page-title">Edit car: {{$car->getTitle()}}</h1>
+            <h1 class="page-title">Edit Car: {{$car->getTitle()}}</h1>
             <form
                 action="{{ route('car.update', $car) }}"
                 method="POST"
