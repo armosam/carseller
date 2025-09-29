@@ -6,6 +6,7 @@ use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\ErrorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\SocialiteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -32,6 +33,12 @@ Route::controller(SessionController::class)->prefix('auth')->group(function () {
         Route::post('/login', 'authentication');
     });
 });
+
+Route::controller(SocialiteController::class)->group(function () {
+    Route::get('/login/oauth/{provider}', 'redirectToProvider')->name('login.oauth');
+    Route::get('/callback/oauth/{provider}', 'handleProviderCallback');
+});
+
 
 Route::controller(EmailVerificationController::class)->prefix('email')->group(function () {
     Route::get('/verify/{id}/{hash}', 'verify')->middleware(['signed'])->name('verification.verify');

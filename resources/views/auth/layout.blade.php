@@ -18,6 +18,13 @@
                             </div>
                         </div>
                     @endsession
+                    @session('error')
+                        <div class="container my-large">
+                            <div class="error-message text-error">
+                                {{ session('error') }}
+                            </div>
+                        </div>
+                    @endsession
 
                     {{$slot}}
 
