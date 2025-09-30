@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\SocialiteController;
+use App\Http\Controllers\WatchlistController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -41,6 +42,11 @@ Route::controller(ProfileController::class)->prefix('profile')->group(function (
    Route::put('/password', 'updatePassword')->name('profile.updatePassword')->middleware('auth');
 });
 
+Route::controller(WatchlistController::class)->prefix('watchlist')->group(function () {
+    Route::get('/', 'index')->name('watchlist.index')->middleware('auth');
+    Route::post('/{car}', 'store')->name('watchlist.store')->middleware('auth');
+});
+
 Route::controller(SocialiteController::class)->group(function () {
     Route::get('/login/oauth/{provider}', 'redirectToProvider')->name('login.oauth');
     Route::get('/callback/oauth/{provider}', 'handleProviderCallback');
@@ -61,7 +67,6 @@ Route::controller(CarController::class)->prefix('car')->group(function () {
             Route::get('/', 'index')->name('car.index');
             Route::post('/', 'store')->name('car.store');
             Route::get('/create', 'create')->name('car.create');
-            Route::get('/watchlist', 'watchList')->name('car.watchlist');
             Route::get('/{car}', 'show')->name('car.show');
             Route::get('/{car}/edit', 'edit')->name('car.edit')->can('update','car');
             Route::addRoute(['PUT','PATCH'],'{car}', 'update')->name('car.update')->can('update', 'car');

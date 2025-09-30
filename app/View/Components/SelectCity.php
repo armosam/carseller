@@ -17,7 +17,7 @@ class SelectCity extends Component
      */
     public function __construct()
     {
-        $this->cities = City::query()->orderBy('name')->get();
+        $this->cities = City::query()->with('state')->orderBy('name')->get();
     }
 
     /**

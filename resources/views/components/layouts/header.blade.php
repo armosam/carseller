@@ -71,7 +71,7 @@
                         <x-layouts.nav-link href="{{route('car.index')}}" :active="request()->is('car')">My Cars</x-layouts.nav-link>
                     </li>
                     <li>
-                        <x-layouts.nav-link href="{{route('car.watchlist')}}" :active="request()->is('car/watchlist')">My Favourite Cars</x-layouts.nav-link>
+                        <x-layouts.nav-link href="{{route('watchlist.index')}}" :active="request()->is('watchlist')">My Favourite Cars</x-layouts.nav-link>
                     </li>
                     <li>
                         <form action="{{route('logout')}}" method="post">

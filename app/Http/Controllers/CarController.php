@@ -359,7 +359,7 @@ class CarController extends Controller
         $sort = $request->input('sort', '-published_at');
 
         $query = Car::query()
-            ->with(['maker', 'model', 'primaryImage', 'city' => ['state'], 'carType', 'fuelType'])
+            ->with(['maker', 'model', 'primaryImage', 'city' => ['state'], 'carType', 'fuelType', 'favouredUsers'])
             ->where('published_at', '<', now());
 
 
@@ -554,18 +554,4 @@ class CarController extends Controller
         return view('car.search', ['cars' => $cars]);
     }
 
-    /**
-     * Display Watch list
-     * @return View
-     */
-    public function watchlist(): View
-    {
-        // Find favorite cars of authenticated user
-        $cars = Auth::user()
-            ->favoriteCars()
-            ->with(['maker', 'model', 'primaryImage', 'city.state', 'carType', 'fuelType'])
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
-        return view('car.watchlist', ['cars' => $cars]);
-    }
 }

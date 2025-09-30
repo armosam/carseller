@@ -70,13 +70,23 @@ class User extends Authenticatable implements MustVerifyEmail
         return !$this->password;
     }
 
+    /**
+     * User's added cars
+     * @return HasMany
+     */
     public function cars(): HasMany {
         return $this->hasMany(Car::class, 'user_id', 'id');
     }
 
+    /**
+     * User's favorite cars connected through pivot table
+     * @return BelongsToMany
+     */
     public function favoriteCars(): BelongsToMany
     {
-        return $this->belongsToMany(Car::class, 'favorite_cars', 'user_id', 'car_id');
+        return $this->belongsToMany(Car::class, 'favorite_cars', 'user_id', 'car_id')
+            ->withPivot('id')
+            ->orderBy('favorite_cars.id', 'desc'); // To order watchlist by descending ID
             //->withTimestamps();
     }
 }

@@ -9,21 +9,21 @@
                     <h1 class="page-title">My Favourite Cars</h1>
                     @if($cars->total() > 0)
                         <div class="pagination-summary">
-                            <p>
-                                Showing {{ $cars->firstItem() }} to {{ $cars->lastItem() }} of {{ $cars->total() }} results
-                            </p>
+                            <p>Showing {{ $cars->firstItem() }} to {{ $cars->lastItem() }} of {{ $cars->total() }} results</p>
                         </div>
                     @endif
                 </div>
                 <div class="car-items-listing">
-                    @forelse($cars as $car)
+                    @foreach($cars as $car)
                         <x-car-item :$car :isInWatchlist="true" />
-                    @empty
-                        <div class="text-center p-large">
-                            There are no items in your watchlist.
-                        </div>
-                    @endforelse
+                    @endforeach
                 </div>
+
+                @if ($cars->count() === 0)
+                    <div class="text-center p-large">
+                        You don't have any favourite cars.
+                    </div>
+                @endif
 
                 {{ $cars->onEachSide(1)->links('pagination') }}
 

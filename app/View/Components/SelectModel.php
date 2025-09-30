@@ -17,7 +17,7 @@ class SelectModel extends Component
      */
     public function __construct()
     {
-        $this->models = Model::query()->orderBy('name')->get();
+        $this->models = Model::query()->with('maker')->orderBy('name')->get();
     }
 
     /**

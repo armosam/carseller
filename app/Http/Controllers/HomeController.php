@@ -21,7 +21,7 @@ class HomeController extends Controller
 
         // Eager loading implementation
         $cars = Car::query()
-            ->with(['maker', 'model', 'primaryImage', 'city.state', 'carType', 'fuelType'])
+            ->with(['maker', 'model', 'primaryImage', 'city.state', 'carType', 'fuelType', 'favouredUsers'])
             ->where('published_at', '<', now())
             ->orderByDesc('published_at')
             ->limit(30)
