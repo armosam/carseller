@@ -26,8 +26,8 @@
       rel="stylesheet"
     /> -->
 
-    <link rel="stylesheet" href="/css/app.css" />
-    <!-- <link rel="stylesheet" href="css/output.css" /> -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!--link rel="stylesheet" href="/css/app.css" /-->
 </head>
 <body @if($bodyClass) class="{{ $bodyClass }}" @endif>
     {{$slot}}
@@ -37,7 +37,7 @@
     crossorigin="anonymous"
     referrerpolicy="no-referrer"
 ></script>
-<script src="/js/app.js"></script>
+<!--script src="/js/app.js"></script -->
 
 </body>
 </html>
