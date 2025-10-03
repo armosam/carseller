@@ -106,6 +106,11 @@ class CarController extends Controller
      */
     public function create(): View
     {
+        // All bellow checking possible here but moved to the route
+        /*//Gate::authorize('create', Car::class);
+        if(request()->user()->cannot('create', Car::class)) {
+            abort(403);
+        }*/
         return view('car.create');
     }
 
@@ -203,13 +208,8 @@ class CarController extends Controller
      */
     public function show(Request $request, Car $car): View
     {
-        if (empty($car->published_at)) {
-            abort(404);
-        }
-
         // get session message
         // $message = $request->session()->get('success');
-
         return view('car.show', ['car' => $car]);
     }
 
@@ -218,6 +218,7 @@ class CarController extends Controller
      */
     public function edit(Car $car): View
     {
+        // All usage of Gates or Policies possible here but preferred to move to routes
         /*Gate::define('car_update', function (User $user, Car $car) {
             return $car->owner()->is($user);
         });

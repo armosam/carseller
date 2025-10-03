@@ -65,9 +65,9 @@ Route::controller(CarController::class)->prefix('car')->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::middleware(['verified'])->group(function () {
             Route::get('/', 'index')->name('car.index');
-            Route::post('/', 'store')->name('car.store');
-            Route::get('/create', 'create')->name('car.create');
-            Route::get('/{car}', 'show')->name('car.show');
+            Route::post('/', 'store')->name('car.store')->can('create', \App\Models\Car::class);
+            Route::get('/create', 'create')->name('car.create')->can('create', \App\Models\Car::class);
+            Route::get('/{car}', 'show')->name('car.show')->can('view', 'car');
             Route::get('/{car}/edit', 'edit')->name('car.edit')->can('update','car');
             Route::addRoute(['PUT','PATCH'],'{car}', 'update')->name('car.update')->can('update', 'car');
             Route::delete('/{car}', 'destroy')->name('car.destroy')->can('delete', 'car');
