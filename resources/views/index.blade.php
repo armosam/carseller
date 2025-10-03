@@ -97,7 +97,7 @@
                 <h2>Latest Added Cars</h2>
                 <div class="car-items-listing">
                     @forelse($cars as $car)
-                        <x-car-item :$car :isInWatchlist="$car->favouredUsers->contains(\Illuminate\Support\Facades\Auth::id())" />
+                        <x-car-item :$car />
                     @empty
                         <div>There are no cars to show</div>
                     @endforelse

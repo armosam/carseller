@@ -41,10 +41,17 @@ class WatchlistController extends Controller
 
         if ($carExists) {
             $user->favoriteCars()->detach($car);
-            return back()->with('success', 'Car successfully removed from favorite list.');
+            //return back()->with('success', 'Car successfully removed from favorite list.');
+            // Return JSON data
+            return response()->json([
+                'message' => 'Car successfully removed from favorite list.',
+            ]);
         }
 
         $user->favoriteCars()->attach($car);
-        return back()->with('success', 'Car successfully added to favorite list.');
+        // return back()->with('success', 'Car successfully added to favorite list.');
+        return response()->json([
+            'message' => 'Car successfully added to favorite list.',
+        ]);
     }
 }

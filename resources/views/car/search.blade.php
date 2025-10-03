@@ -111,7 +111,7 @@
                         @if(!empty(count($cars)))
                             <div class="car-items-listing">
                                 @foreach($cars as $car)
-                                    <x-car-item :$car :isInWatchlist="$car->favouredUsers->contains(\Illuminate\Support\Facades\Auth::id())" />
+                                    <x-car-item :$car />
                                 @endforeach
                             </div>
                         @else
