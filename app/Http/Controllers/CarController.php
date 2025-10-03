@@ -231,6 +231,10 @@ class CarController extends Controller
         }*/
 
         // Gate::authorize('car_update', $car);
+        // Gate::any(['car_update', 'car_destroy'], $car);
+        // Gate::none(['car_update', 'car_destroy'], $car);
+        // For different from auth user
+        // Gate::forUser($user)->allows('car_update', $car);
 
 
         // Adds a job to the queue in 10 sec using queue closure

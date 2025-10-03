@@ -67,9 +67,37 @@ class AppServiceProvider extends ServiceProvider
             return url("auth/set-password/$token?email=" . urlencode($notifiable->getEmailForPasswordReset()));
         });*/
 
+
+        // GATES
+        /*Gate::before(function (User $user, string $ability) {
+            // Define what happens before gates
+            // Returning true skips all gates and gives access
+            // Returning false skips all gates and denys access
+            // Returning null will go to next defined gate checking
+
+           if ($user->can('admin')) {
+               return true;
+           }
+           if ($user->can('guest')) {
+               return false;
+           }
+           return null;
+        });
+
+        Gate::after(function (User $user, string $ability) {
+           // Define what should be done after each gate
+        });*/
+
         // Car Update authorization rule as Gate
         /*Gate::define('car_update', function (User $user, Car $car) {
             return $car->owner()->is($user);
+        });*/
+
+        // Gate with custom deny message
+        /*Gate::define('car_destroy', function (User $user, Car $car) {
+            return $car->owner()->is($user)
+                ? \Illuminate\Auth\Access\Response::allow()
+                : \Illuminate\Auth\Access\Response::deny('Sorry you cannot delete this car.');
         });*/
 
     }
