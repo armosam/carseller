@@ -22,11 +22,13 @@
                             @forelse($cars as $car)
                                 <tr>
                                     <td>
+                                        <a href="{{route('car.show', $car)}}">
                                         <img
                                             src="{{$car->primaryImage?->getUrl() ?: '/img/no_image.png'}}"
                                             alt=""
                                             class="my-cars-img-thumbnail"
                                         />
+                                        </a>
                                     </td>
                                     <td>{{$car->getTitle()}}</td>
                                     <td>{{ $car->getFormattedDate('created_at') }}</td>

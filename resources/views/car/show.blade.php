@@ -183,8 +183,8 @@
                             />
                         </svg>
 
-                        +{{Str::mask($car->phone, '*', -3)}}***
-                        <span class="car-details-phone-view">view full number</span>
+                        <span class="text-phone">+{{Str::mask($car->phone, '*', -3)}}***</span>
+                        <span class="car-details-phone-view" data-url="{{ route('car.showPhone', $car) }}">View Full Number</span>
                     </a>
                 </div>
             </div>

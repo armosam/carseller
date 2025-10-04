@@ -247,6 +247,30 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
+    const initShowPhoneNumber = () => {
+        const span = document.querySelector('.car-details-phone-view');
+        if (!span) return;
+        span.addEventListener('click', (e) => {
+            e.preventDefault();
+            const url = span.dataset.url;
+            const parent = span.parentElement;
+            const text_phone = parent.querySelector('.text-phone');
+
+            if (!url) return;
+
+            axios.post(url).then((response) => {
+                if (response.status === 200) {
+                    const phone = response.data.phone;
+                    parent.href = 'tel:' + phone;
+                    text_phone.textContent = phone;
+                    e.target.dataset.url = '';
+                }
+            }). catch(error => {
+                alert("Internal Server Error. Please Try again later!")
+            })
+        })
+    }
+
     initSlider();
     initImagePicker();
     initMobileNavbar();
@@ -256,6 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initCascadingDropdown('#stateSelect', '#citySelect');
     initSortingDropdown();
     initAddToWatchlist();
+    initShowPhoneNumber()
 
     ScrollReveal().reveal(".hero-slide.active .hero-slider-title", {
         delay: 200,

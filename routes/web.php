@@ -74,6 +74,7 @@ Route::controller(CarController::class)->prefix('car')->group(function () {
             Route::get('/{car}/images', 'carImages')->name('car.images')->can('update','car');
             Route::post('/{car}/images', 'addImages')->name('car.addImages')->can('update','car');
             Route::addRoute(['PUT','PATCH'],'/{car}/images', 'updateImages')->name('car.updateImages')->can('update','car');
+            Route::post('/{car}/phone', 'showPhone')->name('car.showPhone');
         });
     });
 });

@@ -288,11 +288,22 @@ class CarController extends Controller
         return to_route('car.index')->with('success', 'Car deleted.');
     }
 
+    /**
+     * List car images
+     * @param Car $car
+     * @return View
+     */
     public function carImages (Car $car): View
     {
         return view('car.images', ['car' => $car]);
     }
 
+    /**
+     * Add new images
+     * @param Request $request
+     * @param Car $car
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function addImages(Request $request, Car $car)
     {
         $request->validate([
@@ -314,6 +325,12 @@ class CarController extends Controller
         return to_route('car.images', ['car' => $car])->with('success', 'Images added.');
     }
 
+    /**
+     * Updated images
+     * @param Request $request
+     * @param Car $car
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function updateImages (Request $request, Car $car)
     {
         $data = $request->validate([
@@ -342,6 +359,16 @@ class CarController extends Controller
         $car->images()->whereIn('id', $deleteImages)->delete();
 
         return to_route('car.images', ['car' => $car])->with('success', 'Images updated.');
+    }
+
+    /**
+     * Returns phone number of given car
+     * @param Car $car
+     * @return ?string
+     */
+    public function showPhone(Car $car): ?string
+    {
+        return response()->json(['phone' => $car->phone])->getContent();
     }
 
     /**

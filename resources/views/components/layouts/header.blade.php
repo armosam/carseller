@@ -65,13 +65,13 @@
                 </x-layouts.nav-link>
                 <ul class="submenu">
                     <li>
-                        <x-layouts.nav-link href="{{route('profile.index')}}" :active="request()->is('profile')">My Profile</x-layouts.nav-link>
-                    </li>
-                    <li>
                         <x-layouts.nav-link href="{{route('car.index')}}" :active="request()->is('car')">My Cars</x-layouts.nav-link>
                     </li>
                     <li>
                         <x-layouts.nav-link href="{{route('watchlist.index')}}" :active="request()->is('watchlist')">My Favourite Cars</x-layouts.nav-link>
+                    </li>
+                    <li>
+                        <x-layouts.nav-link href="{{route('profile.index')}}" :active="request()->is('profile')">My Profile</x-layouts.nav-link>
                     </li>
                     <li>
                         <form action="{{route('logout')}}" method="post">
