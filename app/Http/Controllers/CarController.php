@@ -17,6 +17,7 @@ use App\Jobs\TranslateJob;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -90,7 +91,7 @@ class CarController extends Controller
         // It gets first authenticated user, then returns cars of that user
         //$cars = User::query()->find(Auth::id())
         //$cars = request()->user()
-        $cars = Auth::user()
+        /*$cars = Auth::user()
             ->cars()
             ->with(['maker', 'model', 'primaryImage'])
             ->orderBy('created_at', 'desc')
@@ -98,7 +99,21 @@ class CarController extends Controller
 //            ->withPath('user/cara');
 //            ->appends(['some-sort' => 'price'])
 //            ->withQueryString()
-//            ->fragment('cars');
+//            ->fragment('cars');*/
+
+        $cache_key = 'my-cars-'.request()->get('page', 1);
+
+        // Caches my-cars data per page for 60 sec. it forgets when cars changing
+        $cars = Cache::remember($cache_key, 60, function () {
+            return Auth::user()->cars()
+                ->with(['maker', 'model', 'primaryImage'])
+                ->orderBy('created_at', 'desc')
+                ->paginate(5);
+            //->withPath('user/cara');
+            //->appends(['some-sort' => 'price'])
+            //->withQueryString()
+            //->fragment('cars');
+        });
         return view('car.index', ['cars' => $cars]);
     }
 

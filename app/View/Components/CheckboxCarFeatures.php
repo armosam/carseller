@@ -5,6 +5,7 @@ namespace App\View\Components;
 use App\Models\CarFeature;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\Component;
 
 class CheckboxCarFeatures extends Component
@@ -16,7 +17,10 @@ class CheckboxCarFeatures extends Component
      */
     public function __construct()
     {
-        $this->features = CarFeature::featuresList();
+        $this->features = Cache::rememberForever('features', function () {
+            return CarFeature::featuresList();
+        });
+        //$this->features = CarFeature::featuresList();
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Models\CarType;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\Component;
 
 class RadioListCarType extends Component
@@ -17,7 +18,10 @@ class RadioListCarType extends Component
      */
     public function __construct()
     {
-        $this->carTypes = CarType::query()->orderBy('name')->get();
+        $this->carTypes = Cache::rememberForever('carTypes', function () {
+            return CarType::query()->orderBy('name')->get();
+        });
+        //$this->carTypes = CarType::query()->orderBy('name')->get();
     }
 
     /**

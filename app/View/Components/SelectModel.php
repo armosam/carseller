@@ -6,6 +6,7 @@ use App\Models\Model;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\Component;
 
 class SelectModel extends Component
@@ -17,7 +18,10 @@ class SelectModel extends Component
      */
     public function __construct()
     {
-        $this->models = Model::query()->with('maker')->orderBy('name')->get();
+        $this->models = Cache::rememberForever('models', function () {
+            return Model::query()->with('maker')->orderBy('name')->get();
+        });
+        //$this->models = Model::query()->with('maker')->orderBy('name')->get();
     }
 
     /**

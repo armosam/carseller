@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 class Car extends EloquentModel
 {
@@ -42,6 +43,37 @@ class Car extends EloquentModel
     ];
 
     protected $guarded = []; // not allowing to fill data if provided
+
+    /**
+     * In case of create, update or delete model it will forget cached data
+     * It will iterate to forget cache for paginated data
+     * @return void
+     */
+    protected static function booted()
+    {
+        $forget_cache = function() {
+            $count = self::query()->count();
+            for($i = 1; $i <= $count/30; $i++) {
+                Cache::forget('home-cars-'.$i);
+            }
+            for($i = 1; $i <= $count/15; $i++) {
+                Cache::forget('favorite-cars-'.$i);
+            }
+            for($i = 1; $i <= $count/5; $i++) {
+                Cache::forget('my-cars-'.$i);
+            }
+        };
+
+        static::created(function ($car) use($forget_cache){
+            $forget_cache();
+        });
+        static::updated(function ($car) use($forget_cache) {
+            $forget_cache();
+        });
+        static::deleted(function ($car) use($forget_cache) {
+            $forget_cache();
+        });
+    }
 
 
     public function features (): HasOne {

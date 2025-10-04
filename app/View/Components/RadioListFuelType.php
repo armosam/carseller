@@ -6,6 +6,7 @@ use App\Models\FuelType;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\Component;
 
 class RadioListFuelType extends Component
@@ -17,7 +18,10 @@ class RadioListFuelType extends Component
      */
     public function __construct()
     {
-        $this->fuelTypes = FuelType::query()->orderBy('name')->get();
+        $this->fuelTypes = Cache::rememberForever('fuelTypes', function () {
+            return FuelType::query()->orderBy('name')->get();
+        });
+        //$this->fuelTypes = FuelType::query()->orderBy('name')->get();
     }
 
     /**
