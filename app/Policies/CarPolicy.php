@@ -58,13 +58,13 @@ class CarPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): Response
+    public function create(User $user)
     {
         // return ($user->is(Auth::user()) && !empty($user->phone));
         // With custom message
         return ($user->is(Auth::user()) && !empty($user->phone))
              ? Response::allow()
-             : Response::deny('You are not authorized to create a car. Please make sure to enter your profile phone number');
+             : Response::deny('You are not authorized to create a car.');
     }
 
     /**

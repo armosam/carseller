@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
 use App\Http\Requests\Car\StoreCarRequest;
 use App\Jobs\TranslateJob;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -104,13 +105,14 @@ class CarController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View
+    public function create(): View|RedirectResponse
     {
         // All bellow checking possible here but moved to the route
-        /*//Gate::authorize('create', Car::class);
+        //Gate::authorize('create', Car::class);
         if(request()->user()->cannot('create', Car::class)) {
-            abort(403);
-        }*/
+            return redirect()->route('profile.index')
+                ->with('error', 'You cannot create a car. Please provide your phone number.');
+        }
         return view('car.create');
     }
 
