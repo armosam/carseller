@@ -18,7 +18,7 @@
                                 Type, etc...
                             </p>
 
-                            <button class="btn btn-hero-slider">Find the car</button>
+                            <a href="{{ route('car.search') }}" class="btn btn-hero-slider">Find the car</a>
                         </div>
                     </div>
                     <div class="slide-image">
@@ -40,7 +40,7 @@
                                 upload photos and the perfect buyer will find it...
                             </p>
 
-                            <button class="btn btn-hero-slider">Add Your Car</button>
+                            <a href="{{ route('car.create') }}" class="btn btn-hero-slider">Add Your Car</a>
                         </div>
                     </div>
                     <div class="slide-image">
@@ -95,13 +95,15 @@
         <section>
             <div class="container">
                 <h2>Latest Added Cars</h2>
-                <div class="car-items-listing">
-                    @forelse($cars as $car)
-                        <x-car-item :$car />
-                    @empty
-                        <div>There are no cars to show</div>
-                    @endforelse
-                </div>
+                @if($cars->count() > 0)
+                    <div class="car-items-listing">
+                        @foreach($cars as $car)
+                            <x-car-item :$car />
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center p-large">There are no cars to show</div>
+                @endif
             </div>
         </section>
         <!--/ New Cars -->
