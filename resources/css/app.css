@@ -412,6 +412,7 @@ body.page-signup {
 .logo-wrapper img {
     /* margin: 1.5rem; */
     margin-left: 0;
+    width: 200px;
 }
 
 .navbar-nav {
@@ -726,9 +727,14 @@ main {
 }
 
 .car-item-img {
-    height: 160px;
+    height: 182px;
     width: 100%;
-    object-fit: cover;
+}
+
+.car-item-details {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
 }
 
 .car-item-badge {
@@ -833,7 +839,7 @@ a.pagination-item:hover {
     overflow: hidden;
     display: flex;
     align-items: center;
-    justify-content: start;
+    justify-content: space-around;
 }
 
 .car-active-image {
@@ -844,7 +850,7 @@ a.pagination-item:hover {
 }
 
 .car-image-thumbnails {
-    width: 110px;
+    max-width: 110px;
     padding: 5px;
     overflow-x: hidden;
     overflow-y: auto;
@@ -868,7 +874,7 @@ a.pagination-item:hover {
     z-index: 10;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.1);
     width: 64px;
     height: 64px;
     display: flex;
@@ -1028,7 +1034,6 @@ a.pagination-item:hover {
     width: 280px;
     display: flex;
     flex-direction: column;
-    padding-left: 1rem;
     border-left: 1px solid rgb(224, 224, 224);
     align-items: center;
     justify-content: start;
@@ -1064,6 +1069,7 @@ a.pagination-item:hover {
 .car-form-images {
     display: flex;
     gap: 0.25rem;
+    padding: 0.95rem;
     flex-wrap: wrap;
     justify-content: start;
 }

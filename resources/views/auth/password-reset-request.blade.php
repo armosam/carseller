@@ -13,7 +13,7 @@
     </x-slot:footerLink>
 
     <x-slot:pageImage>
-        <img src="/img/car-png-39071.png" alt="" class="img-responsive" />
+        <img src="/img/car-png_5.png" alt="" class="img-responsive" />
     </x-slot:pageImage>
 </x-auth-layout>
 

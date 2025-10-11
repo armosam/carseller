@@ -55,6 +55,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const initImagePicker = () => {
         const fileInput = document.querySelector("#carFormImageUpload");
         const imagePreview = document.querySelector("#imagePreviews");
+        const saveNewImages = document.querySelector("#save_new_images");
+        const errorMessages = document.querySelector(".error_messages");
+
         if (!fileInput) {
             return;
         }
@@ -65,6 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 readFile(file).then((url) => {
                     const img = createImage(url);
                     imagePreview.append(img);
+                    saveNewImages.classList.remove("hidden");
+                    errorMessages.innerHTML = '';
                 });
             }
         };

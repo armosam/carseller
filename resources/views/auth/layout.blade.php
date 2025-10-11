@@ -6,7 +6,7 @@
                 <div class="auth-page-form">
                     <div class="text-center">
                         <a href="/">
-                            <img src="/img/logoipsum-265.svg" alt="" />
+                            <img src="/img/logo.png" width="200" alt="" />
                         </a>
                     </div>
                     <h1 class="auth-page-title">{{$title}}</h1>

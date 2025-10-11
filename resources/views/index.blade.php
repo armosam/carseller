@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <div class="slide-image">
-                        <img src="/img/car-png-39071.png" alt="" class="img-responsive" />
+                        <img src="/img/car-png_2.png" alt="" class="img-responsive" />
                     </div>
                 </div>
             </div>
@@ -45,7 +45,29 @@
                         </div>
                     </div>
                     <div class="slide-image">
-                        <img src="/img/car-png-39071.png" alt="" class="img-responsive" />
+                        <img src="/img/car-png_1.png" alt="" class="img-responsive" />
+                    </div>
+                </div>
+            </div>
+            <!-- Item 3 -->
+            <div class="hero-slide">
+                <div class="flex container">
+                    <div class="slide-content">
+                        <h2 class="hero-slider-title">
+                            Do you want to <br />
+                            <strong>sell your car?</strong>
+                        </h2>
+                        <div class="hero-slider-content">
+                            <p>
+                                Submit your car in our user friendly interface, describe it,
+                                upload photos and the perfect buyer will find it...
+                            </p>
+
+                            <a href="{{ route('car.create') }}" class="btn btn-hero-slider">Add Your Car</a>
+                        </div>
+                    </div>
+                    <div class="slide-image">
+                        <img src="/img/car-png_3.png" alt="" class="img-responsive" />
                     </div>
                 </div>
             </div>

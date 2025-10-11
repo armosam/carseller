@@ -6,7 +6,9 @@
             <div class="container">
                 <h1 class="page-title">Manage Images for {{$car->getTitle()}}</h1>
                 <div class="car-images-wrapper">
-                    <form method="POST" action="{{route('car.updateImages', $car)}}" class="card p-medium form-update-images">
+                    <form method="POST" action="{{route('car.updateImages', $car)}}"
+                          style="height: -webkit-fill-available"
+                          class="card p-medium form-update-images">
                         @csrf
                         @method('PUT')
                         <div class="table-responsive">
@@ -64,14 +66,18 @@
                     </form>
                     <form method="POST" action="{{route('car.addImages', $car)}}"
                           enctype="multipart/form-data"
-                          class="card p-medium form-images mb-large">
+                          style="height: -webkit-fill-available"
+                          class="card p-medium form-images">
                         @csrf
+                        <h2>New Images</h2>
                         <div class="form-images">
+                            <div class="error_messages">
                             @foreach($errors->get('images.*') as $imageErrors)
                                 @foreach($imageErrors as $errorMessage)
-                                    <div class="text-error mb-small">{{$errorMessage}}</div>
+                                    <div class="text-error m-medium">{{$errorMessage}}</div>
                                 @endforeach
                             @endforeach
+                            </div>
                             <div class="form-image-upload">
                                 <div class="upload-placeholder">
                                     <svg
@@ -96,7 +102,7 @@
 
                             <div class="p-medium">
                                 <div class="flex justify-end">
-                                    <button class="btn btn-primary">Add Images</button>
+                                    <button id="save_new_images" class="btn btn-primary hidden">Save New Images</button>
                                 </div>
                             </div>
                         </div>

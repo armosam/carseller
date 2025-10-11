@@ -9,7 +9,7 @@
         />
     </a>
 
-    <div class="p-medium">
+    <div class="p-medium car-item-details">
         <div class="flex items-center justify-between">
             <small class="m-0 text-muted">{{$car->city->name}}, {{$car->city->state->name}}</small>
             @auth()

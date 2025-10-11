@@ -8,7 +8,7 @@
                 <div class="form-details">
                     <div class="row">
                         <div class="col">
-                            <form class="card p-large my-large" action="{{ route('profile.update') }}" method="POST">
+                            <form class="card p-large my-large" style="height: -webkit-fill-available" action="{{ route('profile.update') }}" method="POST">
                                 @csrf
                                 @method('PUT')
 
@@ -43,7 +43,7 @@
                         </div>
                         <div class="col">
                             @if(!$user->isOauthUser())
-                                <form class="card p-large my-large" action="{{ route('profile.updatePassword') }}"
+                                <form class="card p-large my-large" style="height: -webkit-fill-available" action="{{ route('profile.updatePassword') }}"
                                       method="POST">
                                     @csrf
                                     @method('PUT')
