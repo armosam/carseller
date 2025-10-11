@@ -27,7 +27,7 @@ class ProfileController extends Controller
             'first_name' => ['required', 'string', 'min:3', 'max:20'],
             'last_name' => ['required', 'string', 'min:3', 'max:20'],
             'phone' => [
-                'required',
+                'nullable',
                 new PhoneRule(), // instantiate your Phone rule
                 Rule::unique('users', 'phone')->ignore($user->id), // unique in users excluding the current user's record
             ],

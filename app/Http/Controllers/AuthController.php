@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Session\PasswordResetRequest;
-use App\Http\Requests\Session\StorePasswordRequest;
+use App\Http\Requests\Session\StorePasswordResetRequest;
 use App\Models\User;
+use App\Rules\PasswordResetTokenRule;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -57,10 +58,9 @@ class AuthController extends Controller
         Auth::logout();
         $attributes = array_merge($request->all(), ['token' => $token]);
 
-        // To validate token create Rule that will use Hash::check() to validate with DB token
         $validator = Validator::make($attributes, [
             'email' => 'required|email|exists:password_reset_tokens,email',
-            'token' => 'required|string',
+            'token' => new PasswordResetTokenRule($request->input('email')),
         ]);
 
         if ($validator->fails()) {
@@ -73,7 +73,7 @@ class AuthController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function storePassword(StorePasswordRequest $request)
+    public function storePassword(StorePasswordResetRequest $request)
     {
         $request->validated();
 

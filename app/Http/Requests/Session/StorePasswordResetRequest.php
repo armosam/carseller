@@ -8,7 +8,7 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
 
-class StorePasswordRequest extends FormRequest
+class StorePasswordResetRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,6 +29,12 @@ class StorePasswordRequest extends FormRequest
             'email' => ['required', 'email', 'exists:password_reset_tokens,email'],
             'password' => ['required', 'confirmed', Password::defaults()],
             'token' => new PasswordResetTokenRule($this->input('email')),
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'email.exists' => trans('validation.exists'),
         ];
     }
 }

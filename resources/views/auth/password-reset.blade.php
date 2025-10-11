@@ -2,8 +2,8 @@
     <form action="{{route('password.store')}}" method="post">
         @csrf
 
-        <x-form.input type="email" name="email" autocomplete="off" value="{{old('email', $email)}}" />
-        <x-form.input type="hidden" name="token" autocomplete="off" value="{{old('token', $token)}}" />
+        <x-form.input type="hidden" name="token" value="{{old('token', $token)}}" autocomplete="off" />
+        <x-form.input type="hidden" name="email" value="{{old('email', $email)}}" autocomplete="off" />
         <x-form.input type="password" name="password" placeholder="New Password" autocomplete="off" />
         <x-form.input type="password" name="password_confirmation" placeholder="Confirm Password" autocomplete="off" />
 
@@ -12,7 +12,7 @@
     </form>
 
     <x-slot:footerLink>
-        Don't need to reset your password ? - <a href="{{route('login')}}"> Click here to login</a>
+        Don't need to reset your password? - <a href="{{route('login')}}">Click here to login</a>
     </x-slot:footerLink>
 
     <x-slot:pageImage>

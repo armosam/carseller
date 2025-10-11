@@ -14,27 +14,22 @@
 
                                 <div class="form-group @error('email') has-error @enderror">
                                     <label>Email</label>
-                                    <input type="email" name="email" value="{{old('email', $user->email)}}"
-                                           placeholder="Email" @disabled($user->isOauthUser()) />
+                                    <input type="email" name="email" value="{{old('email', $user->email)}}" placeholder="Email" @disabled($user->isOauthUser()) />
                                     <p class="error-message">{{$errors->first('email')}}</p>
                                 </div>
                                 <div class="form-group @error('first_name') has-error @enderror">
                                     <label>First Name</label>
-                                    <input type="text" name="first_name"
-                                           value="{{old('first_name', $user->first_name)}}"
-                                           placeholder="First Name"/>
+                                    <input type="text" name="first_name" value="{{old('first_name', $user->first_name)}}" placeholder="First Name"/>
                                     <p class="error-message">{{$errors->first('first_name')}}</p>
                                 </div>
                                 <div class="form-group @error('last_name') has-error @enderror">
                                     <label>Last Name</label>
-                                    <input type="text" name="last_name" value="{{old('last_name', $user->last_name)}}"
-                                           placeholder="Last Name"/>
+                                    <input type="text" name="last_name" value="{{old('last_name', $user->last_name)}}" placeholder="Last Name"/>
                                     <p class="error-message">{{$errors->first('last_name')}}</p>
                                 </div>
                                 <div class="form-group @error('phone') has-error @enderror">
                                     <label>Phone</label>
-                                    <input type="phone" name="phone" value="{{old('phone', $user->phone)}}"
-                                           placeholder="Phone"/>
+                                    <input type="phone" name="phone" value="{{old('phone', $user->phone)}}" placeholder="Phone"/>
                                     <p class="error-message">{{$errors->first('phone')}}</p>
                                 </div>
 
@@ -65,8 +60,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Repeat Password</label>
-                                        <input type="password" name="password_confirmation"
-                                               placeholder="Repeat Password"/>
+                                        <input type="password" name="password_confirmation" placeholder="Repeat Password"/>
                                     </div>
 
                                     <div class="p-medium">

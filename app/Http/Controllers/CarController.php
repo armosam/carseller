@@ -217,7 +217,7 @@ class CarController extends Controller
         // Adding queue job to send an email
         Mail::to(Auth::user())->queue(new CarAdded($newCar));
 
-        return to_route('car.show', ['car' => $newCar])->with('success', 'Car created.');
+        return to_route('car.show', ['car' => $newCar])->with('success', 'Car Created Successfully.');
     }
 
     /**
@@ -292,7 +292,7 @@ class CarController extends Controller
         // Set flash message
         //$request->session()->flash('success', 'Car was updated');
 
-        return to_route('car.show', ['car' => $car])->with('success', 'Car updated.');
+        return to_route('car.show', ['car' => $car])->with('success', 'Car Updated Successfully.');
     }
 
     /**
@@ -302,7 +302,7 @@ class CarController extends Controller
     {
         $car->delete();
 
-        return to_route('car.index')->with('success', 'Car deleted.');
+        return to_route('car.index')->with('success', 'Car Deleted Successfully.');
     }
 
     /**
@@ -339,7 +339,7 @@ class CarController extends Controller
             $car->images()->create(['image_path' => $image->store('images'), 'position' => ++$position]);
         }
 
-        return to_route('car.images', ['car' => $car])->with('success', 'Images added.');
+        return to_route('car.images', ['car' => $car])->with('success', 'Images Added Successfully.');
     }
 
     /**
@@ -375,7 +375,7 @@ class CarController extends Controller
         // Delete images from database
         $car->images()->whereIn('id', $deleteImages)->delete();
 
-        return to_route('car.images', ['car' => $car])->with('success', 'Images updated.');
+        return to_route('car.images', ['car' => $car])->with('success', 'Images Updated Successfully.');
     }
 
     /**

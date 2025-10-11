@@ -1,3 +1,4 @@
+@props(['cars'])
 <x-app-layout title="Home Page" bodyClass="page-home">
     <!-- Home Slider -->
     <section class="hero-slider">

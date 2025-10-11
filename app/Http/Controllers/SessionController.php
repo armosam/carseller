@@ -62,7 +62,7 @@ class SessionController extends Controller
                 'email' => 'User credentials do not match our records.'
             ]);*/
             return redirect()->back()->withErrors([
-                'email' => 'User credentials do not match our records'
+                'email' => 'User credentials do not match our records.'
             ])->onlyInput('email');
         }
 

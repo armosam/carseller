@@ -14,7 +14,7 @@
     </form>
 
     <x-slot:footerLink>
-        Already have an account? - <a href="{{route('login')}}"> Click here to login </a>
+        Already have an account? - <a href="{{route('login')}}">Click here to login</a>
     </x-slot:footerLink>
 
     <x-slot:pageImage>

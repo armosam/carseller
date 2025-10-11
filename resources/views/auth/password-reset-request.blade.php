@@ -9,7 +9,7 @@
     </form>
 
     <x-slot:footerLink>
-        Don't need to reset your password ? - <a href="{{route('login')}}"> Click here to login</a>
+        Don't need to reset your password? - <a href="{{route('login')}}">Click here to login</a>
     </x-slot:footerLink>
 
     <x-slot:pageImage>

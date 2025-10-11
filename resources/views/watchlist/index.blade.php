@@ -21,7 +21,7 @@
 
                 @if ($cars->count() === 0)
                     <div class="text-center p-large">
-                        You don't have any favourite cars.
+                        You do not have any favourite cars.
                     </div>
                 @endif
 

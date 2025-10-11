@@ -99,7 +99,7 @@ class StoreCarRequest extends FormRequest
             'maker_id' => ['required', 'integer', 'exists:App\Models\Maker,id'],
             'model_id' => ['required', 'integer', 'exists:App\Models\Model,id'],
             'year' => ['required', 'numeric', 'between:1990,2025'],
-            'vin' => ['required', 'string', 'max:17'],
+            'vin' => ['required', 'string', 'min:17,max:17'],
             'price' => ['required', 'numeric'],
             'mileage' => ['required', 'integer'],
             'interior_color' => ['required', 'string', 'max:10'],
