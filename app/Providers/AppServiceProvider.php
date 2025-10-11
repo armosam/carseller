@@ -39,6 +39,9 @@ class AppServiceProvider extends ServiceProvider
         // Share a year in the all views
         View::share('year', date('Y'));
 
+        // Define view namespace path for error pages
+        View::addNamespace('errors', resource_path('views/errors'));
+
         // Listen to all database queries and log in the file logs/query.log
         if (app()->environment('local') && env('LOG_SLOW_QUERY', false)) {
             DB::listen(function ($query) {

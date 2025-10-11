@@ -3,7 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\EmailVerificationController;
-use App\Http\Controllers\ErrorController;
+use App\Http\Controllers\FallbackController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SessionController;
@@ -94,4 +94,4 @@ Route::prefix('admin')->group(function () {
 });
 
 
-//Route::fallback(ErrorController::class);
+Route::fallback(FallbackController::class);
