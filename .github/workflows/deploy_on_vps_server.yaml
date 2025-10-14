@@ -58,8 +58,6 @@ jobs:
       - name: Deploy Application to Server
         if: ${{ success() }}
         uses: appleboy/ssh-action@master
-        env:
-          APPLICATION_PATH: "${{ vars.APPLICATION_PATH }}"
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
@@ -67,8 +65,9 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
           script: |
-            cd "$APPLICATION_PATH"
-            echo "Deploying application in the path $APPLICATION_PATH"
+            APP_PATH="${{ vars.APPLICATION_PATH }}"
+            cd "$APP_PATH"
+            echo "Deploying application in the path $APP_PATH"
             git checkout master
             if git rev-parse -q --verify "refs/tags/${{ github.event.release.tag_name }}"; then
               git tag -d ${{ github.event.release.tag_name }}
