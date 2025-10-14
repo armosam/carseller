@@ -45,11 +45,21 @@ jobs:
       - name: Run Tests
         run: php artisan test
 
+      - name: Upload Built Assets to Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          source: public/build
+          target: ${{ vars.APPLICATION_PATH }}/public
+
       - name: Deploy Application to Server
         if: ${{ success() }}
         uses: appleboy/ssh-action@master
         env:
-          APP_PATH: ${{ vars.APPLICATION_PATH }}
+          APPLICATION_PATH: ${{ vars.APPLICATION_PATH }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
@@ -57,17 +67,17 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script_stop: true
           script: |
-            cd "$APP_PATH"
-            echo "Deploing application in the path $APP_PATH"
+            cd "$APPLICATION_PATH"
+            echo "Deploying application in the path $APPLICATION_PATH"
             git checkout master
             if git rev-parse -q --verify "refs/tags/${{ github.event.release.tag_name }}"; then
               git tag -d ${{ github.event.release.tag_name }}
             fi
             git fetch --all
             git checkout ${{ github.event.release.tag_name }}
-            composer install
-            npm ci
-            npm run build
+            composer install --no-dev --optimize-autoloader
+            #npm ci
+            #npm run build
             php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
