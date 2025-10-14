@@ -68,7 +68,7 @@ jobs:
             APP_PATH="${{ vars.APPLICATION_PATH }}"
             cd "$APP_PATH"
             echo "Deploying application in the path $APP_PATH"
-            git checkout master
+            #git checkout master
             if git rev-parse -q --verify "refs/tags/${{ github.event.release.tag_name }}"; then
               git tag -d ${{ github.event.release.tag_name }}
             fi
