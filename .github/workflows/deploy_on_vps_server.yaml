@@ -16,7 +16,7 @@ jobs:
         with:
           php-version: '8.3'
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js v20
         uses: actions/setup-node@v3
         with:
           node-version: 20
@@ -45,7 +45,7 @@ jobs:
       - name: Run Tests
         run: php artisan test
 
-      - name: Deploy PHP to Server
+      - name: Deploy Application to Server
         if: ${{ success() }}
         uses: appleboy/ssh-action@master
         with:

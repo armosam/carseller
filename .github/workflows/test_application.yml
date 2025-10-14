@@ -1,6 +1,7 @@
 name: Car Seller test
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
   pull_request:
@@ -18,9 +19,9 @@ jobs:
           php-version: '8.3'
 
       - name: Setup Node.js v20
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20.x'
 
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -52,5 +53,5 @@ jobs:
       - name: Execute tests via PHPUnit/Pest
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: laravel
+          DB_DATABASE: database/database.sqlite
         run: php artisan test
