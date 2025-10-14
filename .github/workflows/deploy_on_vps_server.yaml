@@ -53,13 +53,13 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           source: public/build
-          target: ${{ vars.APPLICATION_PATH }}/public
+          target: ${{ vars.APPLICATION_PATH }}
 
       - name: Deploy Application to Server
         if: ${{ success() }}
         uses: appleboy/ssh-action@master
         env:
-          APPLICATION_PATH: ${{ vars.APPLICATION_PATH }}
+          APPLICATION_PATH: "${{ vars.APPLICATION_PATH }}"
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
