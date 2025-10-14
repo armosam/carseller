@@ -1,8 +1,9 @@
 name: Deploy To VPS Server
 
 on:
+  workflow_dispatch:
   release:
-    types: [created]
+    types: [published]
 
 jobs:
   build:
@@ -11,17 +12,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup PHP
+      - name: Setup PHP 8.3
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node.js v20
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20.x'
 
-      - name: Create .env
+      - name: Create .env file
         run: cp .env.example .env
 
       - name: Install composer Dependencies
@@ -42,10 +43,13 @@ jobs:
       - name: Build Assets
         run: npm run build
 
+      - name: Execute Pint to check code style
+        run: vendor/bin/pint --bail
+
       - name: Run Tests
         run: php artisan test
 
-      - name: Deploy PHP to Server
+      - name: Deploy Application to Server
         if: ${{ success() }}
         uses: appleboy/ssh-action@master
         with:
@@ -53,19 +57,36 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
-          script_stop: true
           script: |
-            cd YOUR_PROJECT_LOCATION
-            git checkout master
+            set -e
+            APP_PATH="${{ vars.APPLICATION_PATH }}"
+            cd "$APP_PATH"
+            eval "$(ssh-agent -s)"
+            ssh-add ~/.ssh/id_ed25519_littlebeecenter
+            echo "Deploying application in the path $APP_PATH"
+            #git checkout master
             if git rev-parse -q --verify "refs/tags/${{ github.event.release.tag_name }}"; then
               git tag -d ${{ github.event.release.tag_name }}
             fi
             git fetch --all
             git checkout ${{ github.event.release.tag_name }}
-            composer install
-            npm ci
-            npm run build
+            composer install --no-dev --optimize-autoloader
+            #npm ci
+            #npm run build
             php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
+
+      - name: Upload Built Assets to Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          source: public/build/*
+          target: "${{ vars.APPLICATION_PATH }}/public/build/"
+          rm: true
+          strip_components: 2
+          overwrite: true

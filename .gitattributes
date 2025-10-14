@@ -6,6 +6,14 @@
 *.md diff=markdown
 *.php diff=php
 
+# Treat image files as binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.svg binary
+*.webp binary
+
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
