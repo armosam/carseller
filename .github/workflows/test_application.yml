@@ -1,4 +1,4 @@
-name: Car Seller test
+name: Car Seller Test
 
 on:
   workflow_dispatch:
@@ -51,7 +51,4 @@ jobs:
         run: npm run build
 
       - name: Execute tests via PHPUnit/Pest
-        env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: database/database.sqlite
         run: php artisan test
