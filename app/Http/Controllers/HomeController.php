@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Car;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
@@ -18,7 +17,7 @@ class HomeController extends Controller
             ->limit(30)
             ->get();*/
 
-        //dd(exec('whoami'));
+        // dd(exec('whoami'));
 
         // Eager loading implementation
         /*$cars = Car::query()
@@ -40,11 +39,11 @@ class HomeController extends Controller
                 ->get();
         });
 
-
         return view('index', ['cars' => $cars]);
     }
 
-    public function mondaySale(): View {
+    public function mondaySale(): View
+    {
         return view('monday-sale');
     }
 }

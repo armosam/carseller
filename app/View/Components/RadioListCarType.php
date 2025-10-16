@@ -21,7 +21,7 @@ class RadioListCarType extends Component
         $this->carTypes = Cache::rememberForever('carTypes', function () {
             return CarType::query()->orderBy('name')->get();
         });
-        //$this->carTypes = CarType::query()->orderBy('name')->get();
+        // $this->carTypes = CarType::query()->orderBy('name')->get();
     }
 
     /**

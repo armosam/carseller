@@ -12,6 +12,7 @@ class AboutTest extends TestCase
 
         $response->assertStatus(200);
     }
+
     /**
      * A basic view test example.
      */

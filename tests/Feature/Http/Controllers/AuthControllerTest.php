@@ -5,7 +5,6 @@ namespace Tests\Feature\Http\Controllers;
 use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -29,7 +28,7 @@ class AuthControllerTest extends TestCase
             ->assertSee('Reset Password</button>', false)
             ->assertSee('<input type="email" name="email" placeholder="Your Email"', false)
             ->assertSee("Don't need to reset your password?", false)
-            ->assertSee('<a href="'.route('login').'">Click here to login</a>', false);;
+            ->assertSee('<a href="'.route('login').'">Click here to login</a>', false);
     }
 
     public function test_password_reset_request_with_empty_email(): void
@@ -61,7 +60,7 @@ class AuthControllerTest extends TestCase
         ]);
         $this->assertDatabaseCount('users', 1);
         $this->assertDatabaseHas('users', [
-            'email' => 'aaa@test.com'
+            'email' => 'aaa@test.com',
         ]);
 
         $response = $this->post(route('password.storeResetRequest'), [
@@ -84,7 +83,7 @@ class AuthControllerTest extends TestCase
         ]);
         $this->assertDatabaseCount('users', 1);
         $this->assertDatabaseHas('users', [
-            'email' => 'aaa@test.com'
+            'email' => 'aaa@test.com',
         ]);
 
         $response = $this->post(route('password.storeResetRequest'), [
@@ -183,7 +182,6 @@ class AuthControllerTest extends TestCase
 
     /**
      * When token is older than configured amount (60) minutes then it considers as expired
-     * @return void
      */
     public function test_password_reset_page_response_404_with_expired_token(): void
     {
@@ -222,7 +220,7 @@ class AuthControllerTest extends TestCase
         $response = $this->get(route('password.reset', [$token, 'email' => $email]));
 
         $response->assertStatus(200)
-            ->assertSee('Password Reset | ' . config('app_name'))
+            ->assertSee('Password Reset | '.config('app_name'))
             ->assertSee('type="hidden" name="token" value="'.$token.'" autocomplete="off"', false)
             ->assertSee('type="hidden" name="email" value="'.$email.'" autocomplete="off"', false)
             ->assertSee('type="password" name="password" placeholder="New Password" autocomplete="off"', false)
@@ -231,7 +229,6 @@ class AuthControllerTest extends TestCase
             ->assertSee('Set New Password')
             ->assertSee('<a href="'.route('login').'">Click here to login</a>', false);
     }
-
 
     public function test_store_password_reset_with_empty_email(): void
     {
@@ -244,7 +241,7 @@ class AuthControllerTest extends TestCase
             'email' => $email,
             'token' => $token,
             'password' => $password,
-            'password_confirmation' => $password_confirmation
+            'password_confirmation' => $password_confirmation,
         ]);
 
         $response->assertStatus(302)
@@ -264,7 +261,7 @@ class AuthControllerTest extends TestCase
             'email' => $email,
             'token' => $token,
             'password' => $password,
-            'password_confirmation' => $password_confirmation
+            'password_confirmation' => $password_confirmation,
         ]);
 
         $response->assertStatus(302)
@@ -293,7 +290,7 @@ class AuthControllerTest extends TestCase
             'email' => $email,
             'token' => $token,
             'password' => $password,
-            'password_confirmation' => $password_confirmation
+            'password_confirmation' => $password_confirmation,
         ]);
 
         $response->assertStatus(302)
@@ -322,7 +319,7 @@ class AuthControllerTest extends TestCase
             'email' => $email,
             'token' => $token,
             'password' => $password,
-            'password_confirmation' => $password_confirmation
+            'password_confirmation' => $password_confirmation,
         ]);
 
         $response->assertStatus(302)
@@ -351,7 +348,7 @@ class AuthControllerTest extends TestCase
             'email' => $email,
             'token' => $token,
             'password' => $password,
-            'password_confirmation' => $password_confirmation
+            'password_confirmation' => $password_confirmation,
         ]);
 
         $response->assertStatus(302)
@@ -380,7 +377,7 @@ class AuthControllerTest extends TestCase
             'email' => $email,
             'token' => $token,
             'password' => $password,
-            'password_confirmation' => $password_confirmation
+            'password_confirmation' => $password_confirmation,
         ]);
 
         $response->assertStatus(302)
@@ -409,7 +406,7 @@ class AuthControllerTest extends TestCase
             'email' => $email,
             'token' => $token,
             'password' => $password,
-            'password_confirmation' => $password_confirmation
+            'password_confirmation' => $password_confirmation,
         ]);
 
         $response->assertStatus(302)
@@ -438,7 +435,7 @@ class AuthControllerTest extends TestCase
             'email' => $email,
             'token' => $token,
             'password' => $password,
-            'password_confirmation' => $password_confirmation
+            'password_confirmation' => $password_confirmation,
         ]);
 
         $response->assertStatus(302)
@@ -472,7 +469,7 @@ class AuthControllerTest extends TestCase
             'email' => $email,
             'token' => $token,
             'password' => $password,
-            'password_confirmation' => $password_confirmation
+            'password_confirmation' => $password_confirmation,
         ]);
 
         $response->assertStatus(302)

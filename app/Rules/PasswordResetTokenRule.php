@@ -12,7 +12,7 @@ use Illuminate\Translation\PotentiallyTranslatedString;
 
 class PasswordResetTokenRule implements ValidationRule
 {
-    protected string|null $email;
+    protected ?string $email;
 
     /**
      * Constructor receives the email to check the token against.
@@ -26,7 +26,7 @@ class PasswordResetTokenRule implements ValidationRule
      * Run the validation rule to check password reset token.
      * It verifies that token exists in the table and not expired (60 mins default)
      *
-     * @param Closure(string, ?string=): PotentiallyTranslatedString $fail
+     * @param  Closure(string, ?string=): PotentiallyTranslatedString  $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
@@ -45,8 +45,8 @@ class PasswordResetTokenRule implements ValidationRule
 
         // Step 3: Check the token against the hashed version
         // If record doesn't exist or token doesn't match or expired (default configured expiration time)
-        if ( !$record
-            || !Hash::check($value, $record->token)
+        if (! $record
+            || ! Hash::check($value, $record->token)
             || Carbon::parse($record->created_at)->addMinutes(config('auth.passwords.users.expire'))->isPast()
         ) {
             $fail('The password reset token is invalid or has expired.');

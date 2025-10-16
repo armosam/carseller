@@ -5,7 +5,6 @@ namespace Tests\Feature\Http\Controllers;
 use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
@@ -145,7 +144,7 @@ class SessionControllerTest extends TestCase
             ->assertSee('<button ', false)
             ->assertSee('<a href="'.route('login.oauth', 'google').'"', false)
             ->assertSee('<a href="'.route('login.oauth', 'facebook').'"', false)
-            ->assertSee("Already have an account?", false)
+            ->assertSee('Already have an account?', false)
             ->assertSee('<a href="'.route('login').'">Click here to login</a>', false);
     }
 
@@ -163,7 +162,7 @@ class SessionControllerTest extends TestCase
             ->assertRedirectBack()
             ->assertSessionDoesntHaveErrors(['phone'])
             ->assertInvalid(['first_name', 'last_name', 'email', 'password']);
-            //->ddSession();
+        // ->ddSession();
     }
 
     public function test_signup_with_no_email(): void
@@ -282,7 +281,7 @@ class SessionControllerTest extends TestCase
             ->assertRedirectToRoute('home')
             ->assertSessionDoesntHaveErrors(['first_name', 'last_name', 'phone', 'password'])
             ->assertInvalid([
-                'email' => 'The email has already been taken.'
+                'email' => 'The email has already been taken.',
             ]);
 
         $this->assertDatabaseCount('users', 1);
@@ -353,9 +352,10 @@ class SessionControllerTest extends TestCase
         $user = User::query()->where('email', '=', 'a@test.com')->first();
         $this->assertNotNull($user);
         $this->assertFalse($user->hasVerifiedEmail());
-        Notification::assertSentTo ( $user, VerifyEmail::class, function ($notification) use ($user, &$verificationUrl) {
+        Notification::assertSentTo($user, VerifyEmail::class, function ($notification) use ($user, &$verificationUrl) {
             // Extract the verification URL from the notification
             $verificationUrl = $notification->toMail($user)->actionUrl;
+
             // You can do assertions here too
             return str_contains($verificationUrl, '/email/verify/');
         });

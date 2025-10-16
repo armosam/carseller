@@ -20,7 +20,7 @@ class CheckboxCarFeatures extends Component
         $this->features = Cache::rememberForever('features', function () {
             return CarFeature::featuresList();
         });
-        //$this->features = CarFeature::featuresList();
+        // $this->features = CarFeature::featuresList();
     }
 
     /**

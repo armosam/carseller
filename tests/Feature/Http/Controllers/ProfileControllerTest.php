@@ -5,7 +5,6 @@ namespace Tests\Feature\Http\Controllers;
 use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
@@ -34,10 +33,10 @@ class ProfileControllerTest extends TestCase
             ->assertStatus(200)
             ->assertSee('Logout')
             ->assertSee('My Profile')
-            ->assertSeeHtml('type="email" name="email" value="' . $user->email . '"')
-            ->assertSeeHtml('type="text" name="first_name" value="' . $user->first_name . '"')
-            ->assertSeeHtml('type="text" name="last_name" value="' . $user->last_name . '"')
-            ->assertSeeHtml('type="phone" name="phone" value="' . $user->phone . '"')
+            ->assertSeeHtml('type="email" name="email" value="'.$user->email.'"')
+            ->assertSeeHtml('type="text" name="first_name" value="'.$user->first_name.'"')
+            ->assertSeeHtml('type="text" name="last_name" value="'.$user->last_name.'"')
+            ->assertSeeHtml('type="phone" name="phone" value="'.$user->phone.'"')
             ->assertSeeHtml('>Update</button>')
 
             ->assertSeeHtml('input type="password" name="current_password" placeholder="Current Password"')
@@ -54,17 +53,17 @@ class ProfileControllerTest extends TestCase
     {
         $user = User::factory()->create([
             'facebook_id' => '123456789',
-            'password' => null
+            'password' => null,
         ]);
         $response = $this->actingAs($user)->get(route('profile.index'));
         $response
             ->assertStatus(200)
             ->assertSee('Logout')
             ->assertSee('My Profile')
-            ->assertSeeHtml('type="email" name="email" value="' . $user->email . '"')
-            ->assertSeeHtml('type="text" name="first_name" value="' . $user->first_name . '"')
-            ->assertSeeHtml('type="text" name="last_name" value="' . $user->last_name . '"')
-            ->assertSeeHtml('type="phone" name="phone" value="' . $user->phone . '"')
+            ->assertSeeHtml('type="email" name="email" value="'.$user->email.'"')
+            ->assertSeeHtml('type="text" name="first_name" value="'.$user->first_name.'"')
+            ->assertSeeHtml('type="text" name="last_name" value="'.$user->last_name.'"')
+            ->assertSeeHtml('type="phone" name="phone" value="'.$user->phone.'"')
             ->assertSeeHtml('>Update</button>')
 
             ->assertDontSeeHtml('input type="password" name="current_password" placeholder="Current Password"')
@@ -217,11 +216,12 @@ class ProfileControllerTest extends TestCase
             ->assertSessionHas('success', 'Your profile was updated. Email verification message was sent.');
 
         // Ensure email verification notification was sent when email was changed
-        Notification::assertSentTo ( $user, VerifyEmail::class, function ($notification) use ($user) {
+        Notification::assertSentTo($user, VerifyEmail::class, function ($notification) use ($user) {
             $this->assertEquals('Verify Email Address', $notification->toMail($user)->subject);
             $this->assertEquals('Verify Email Address', $notification->toMail($user)->actionText);
             $this->assertEquals(['Please click the button below to verify your email address.'], $notification->toMail($user)->introLines);
             $this->assertStringContainsString('/email/verify/', $notification->toMail($user)->actionUrl);
+
             return true;
         });
     }

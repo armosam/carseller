@@ -2,17 +2,17 @@
 
 namespace App\Providers;
 
-//use App\Models\Model;
+// use App\Models\Model;
 use App\Models\Car;
 use App\Models\User;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Auth\Notifications\ResetPassword;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // If you need to prevent lazy loading on the whole project
         // Then you need to use with() everywhere (eager loading)
-        //Model::preventLazyLoading();
+        // Model::preventLazyLoading();
 
         // Register pagination
         Paginator::defaultView('pagination');
@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
                     Log::channel('sql')->debug('Slow Query', [
                         'query' => $query->sql,
                         'bindings' => $query->bindings,
-                        'time' => $query->time . 'ms',
+                        'time' => $query->time.'ms',
                     ]);
                 }
             });
@@ -69,7 +69,6 @@ class AppServiceProvider extends ServiceProvider
             // Custom URL format for password reset in the email
             return url("auth/set-password/$token?email=" . urlencode($notifiable->getEmailForPasswordReset()));
         });*/
-
 
         // GATES
         /*Gate::before(function (User $user, string $ability) {

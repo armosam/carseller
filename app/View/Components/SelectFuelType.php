@@ -21,7 +21,7 @@ class SelectFuelType extends Component
         $this->fuelTypes = Cache::rememberForever('fuelTypes', function () {
             return FuelType::query()->orderBy('name')->get();
         });
-        //$this->fuelTypes = FuelType::query()->orderBy('name')->get();
+        // $this->fuelTypes = FuelType::query()->orderBy('name')->get();
     }
 
     /**

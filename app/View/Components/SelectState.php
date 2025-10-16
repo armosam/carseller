@@ -21,7 +21,7 @@ class SelectState extends Component
         $this->states = Cache::rememberForever('states', function () {
             return State::query()->orderBy('name')->get();
         });
-        //$this->states = State::query()->orderBy('name')->get();
+        // $this->states = State::query()->orderBy('name')->get();
     }
 
     /**

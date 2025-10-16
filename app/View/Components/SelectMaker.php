@@ -28,7 +28,7 @@ class SelectMaker extends Component
         Cache::increment('count', 5);*/
 
         // Put into in cache in file cache
-        //Cache::store('file')->set('makers', 'test', 5);
+        // Cache::store('file')->set('makers', 'test', 5);
 
         /*// Get from cache
         $count = Cache::get('count');
@@ -72,13 +72,12 @@ class SelectMaker extends Component
             return Maker::query()->orderBy('name')->get();
         });*/
 
-
         // Putting into the forever cache and automate renewal
         $this->makers = Cache::rememberForever('makers', function () {
             return Maker::query()->orderBy('name')->get();
         });
 
-        //$this->makers = Maker::query()->orderBy('name')->get();
+        // $this->makers = Maker::query()->orderBy('name')->get();
     }
 
     /**

@@ -28,13 +28,13 @@ class ProfileController extends Controller
             'last_name' => ['required', 'string', 'min:3', 'max:20'],
             'phone' => [
                 'nullable',
-                new PhoneRule(), // instantiate your Phone rule
+                new PhoneRule, // instantiate your Phone rule
                 Rule::unique('users', 'phone')->ignore($user->id), // unique in users excluding the current user's record
             ],
         ];
 
-        if (!$user->isOauthUser()) {
-            $rules['email'] = ['required', 'email', 'unique:users,email,' . $user->id]; // unique in users excluding the current user's record
+        if (! $user->isOauthUser()) {
+            $rules['email'] = ['required', 'email', 'unique:users,email,'.$user->id]; // unique in users excluding the current user's record
         }
 
         $data = $request->validate($rules);
@@ -69,14 +69,14 @@ class ProfileController extends Controller
 
         $data = $request->validate($rules);
 
-        if (!Hash::check($data['current_password'], $user->password)) {
+        if (! Hash::check($data['current_password'], $user->password)) {
             return redirect(route('profile.index'))->with('error', 'Your current password is incorrect.');
         }
 
         $user->update([
             'password' => Hash::make($data['password']),
         ]);
+
         return redirect(route('profile.index'))->with('success', 'Your password was updated.');
     }
-
 }

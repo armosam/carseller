@@ -38,7 +38,7 @@ class SocialiteController extends Controller
                 $dbUser->$field = $user->id;
                 $dbUser->save();
             } else {
-                list($first_name, $last_name) = explode(' ', $user->getName());
+                [$first_name, $last_name] = explode(' ', $user->getName());
                 $dbUser = User::query()->create([
                     'email' => $user->email,
                     'first_name' => trim($first_name),
@@ -49,6 +49,7 @@ class SocialiteController extends Controller
             }
 
             Auth::login($dbUser);
+
             return redirect()->intended(route('home'));
         } catch (Exception $e) {
             return redirect(route('login'))

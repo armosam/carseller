@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Car;
 
+use App\Rules\PhoneRule;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use App\Rules\PhoneRule;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 
@@ -42,14 +42,14 @@ class StoreCarRequest extends FormRequest
             'published_at' => 'Published At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'deleted_at' => 'Deleted At'
+            'deleted_at' => 'Deleted At',
         ];
     }
 
     public function messages(): array
     {
         return [
-            //'required' => ':attribute is required.',
+            // 'required' => ':attribute is required.',
             'maker_id.required' => ':attribute is required.',
             'maker_id.integer' => ':attribute must be an integer.',
             'vin.required' => ':attribute is required.',
@@ -58,25 +58,23 @@ class StoreCarRequest extends FormRequest
 
     /**
      * Prepares, converts data before validation
-     * @return void
      */
     protected function prepareForValidation(): void
     {
         $this->merge([
             'vin' => strtoupper($this->vin),
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
         ]);
     }
 
     /**
      * Prepares, converts, adds a data to payload after validation passed
-     * @return void
      */
     protected function passedValidation(): void
     {
         $this->merge([
             'vin' => strtoupper($this->vin),
-            'user_id' => Auth::id()
+            'user_id' => Auth::id(),
         ]);
     }
 
@@ -110,15 +108,15 @@ class StoreCarRequest extends FormRequest
             'state_id' => ['required', 'integer', 'exists:App\Models\State,id'],
             'city_id' => ['required', 'integer', 'exists:App\Models\City,id'],
             'address' => ['required', 'string', 'max:255'],
-            //'phone' => ['required', 'string', 'max:10'],
-            'phone' => new PhoneRule(), // Custom rule
+            // 'phone' => ['required', 'string', 'max:10'],
+            'phone' => new PhoneRule, // Custom rule
 
             'features' => 'array',
             'features.*' => 'string',
             'images' => 'array',
             'images.*' => File::image()
                 ->max(config('image.max_size')),
-                /*->dimensions(Rule::dimensions()
+            /*->dimensions(Rule::dimensions()
                     ->maxWidth(config('image.max_width'))
                     ->maxHeight(config('image.max_height'))
                 ),*/
@@ -127,7 +125,7 @@ class StoreCarRequest extends FormRequest
             'published_at' => ['nullable', 'date'],
             'created_at' => ['nullable', 'date'],
             'updated_at' => ['nullable', 'date'],
-            'deleted_at' => ['nullable', 'date']
+            'deleted_at' => ['nullable', 'date'],
         ];
     }
 }

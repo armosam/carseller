@@ -15,8 +15,8 @@ class Model extends EloquentModel
 
     protected $fillable = ['name', 'maker_id'];
 
-
-    public function cars(): HasMany {
+    public function cars(): HasMany
+    {
         return $this->hasMany(Car::class, 'model_id', 'id');
     }
 

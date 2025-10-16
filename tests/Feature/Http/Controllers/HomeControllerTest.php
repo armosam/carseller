@@ -4,7 +4,6 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Collection;
 use Tests\TestCase;
 
@@ -64,14 +63,14 @@ class HomeControllerTest extends TestCase
             ])
             ->assertSeeHtmlInOrder([
                 'href="'.route('car.search').'"',
-                'Search'
+                'Search',
             ])
-        ->assertDontSee('Add New Car')
-        ->assertDontSee('My Account')
-        ->assertDontSee('My Favorite Cars')
-        ->assertDontSee('My Cars')
-        ->assertDontSee('My Profile')
-        ->assertDontSee('Logout');
+            ->assertDontSee('Add New Car')
+            ->assertDontSee('My Account')
+            ->assertDontSee('My Favorite Cars')
+            ->assertDontSee('My Cars')
+            ->assertDontSee('My Profile')
+            ->assertDontSee('Logout');
     }
 
     public function test_home_page_renders_for_authenticated_user(): void
@@ -85,30 +84,30 @@ class HomeControllerTest extends TestCase
             ->assertDontSee('Signup')
             ->assertSeeHtmlInOrder([
                 'href="'.route('car.search').'"',
-                'Search'
+                'Search',
             ])
-        ->assertSeeHtmlInOrder([
-            'href="' . route('car.create') . '"',
-            'Add New Car'
-        ])
-        ->assertSeeHtmlInOrder([
-            'href="javascript:void(0)"',
-            'My Account'
-        ])
-        ->assertSeeHtmlInOrder([
-            'href="' . route('watchlist.index') . '"',
-            'My Favourite Cars'
-        ])
-        ->assertSeeHtmlInOrder([
-            'href="' . route('car.index') . '"',
-            'My Cars'
-        ])
-        ->assertSeeHtmlInOrder([
-            'href="' . route('profile.index') . '"',
-            'My Profile'
-        ])
-        ->assertSeeHtmlInOrder([
-            'button>Logout</button'
-        ]);
+            ->assertSeeHtmlInOrder([
+                'href="'.route('car.create').'"',
+                'Add New Car',
+            ])
+            ->assertSeeHtmlInOrder([
+                'href="javascript:void(0)"',
+                'My Account',
+            ])
+            ->assertSeeHtmlInOrder([
+                'href="'.route('watchlist.index').'"',
+                'My Favourite Cars',
+            ])
+            ->assertSeeHtmlInOrder([
+                'href="'.route('car.index').'"',
+                'My Cars',
+            ])
+            ->assertSeeHtmlInOrder([
+                'href="'.route('profile.index').'"',
+                'My Profile',
+            ])
+            ->assertSeeHtmlInOrder([
+                'button>Logout</button',
+            ]);
     }
 }

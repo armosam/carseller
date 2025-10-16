@@ -13,12 +13,12 @@ class EmailVerificationController extends Controller
     {
         $user = User::query()->findOrFail($id);
 
-        if (!hash_equals($hash, sha1($user->getEmailForVerification()))) {
+        if (! hash_equals($hash, sha1($user->getEmailForVerification()))) {
             return back()->withErrors(['Invalid verification link.']);
         }
 
         // After verification could log in
-        //Auth::login($user);
+        // Auth::login($user);
 
         if ($user->hasVerifiedEmail()) {
             return redirect()->route('home')->with('success', 'Your email already verified.');
@@ -39,6 +39,7 @@ class EmailVerificationController extends Controller
     public function send(Request $request)
     {
         $request->user()->sendEmailVerificationNotification();
+
         return back()->with('success', 'Verification email sent!');
     }
 }

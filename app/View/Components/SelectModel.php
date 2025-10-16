@@ -21,7 +21,7 @@ class SelectModel extends Component
         $this->models = Cache::rememberForever('models', function () {
             return Model::query()->with('maker')->orderBy('name')->get();
         });
-        //$this->models = Model::query()->with('maker')->orderBy('name')->get();
+        // $this->models = Model::query()->with('maker')->orderBy('name')->get();
     }
 
     /**

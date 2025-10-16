@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Middleware\EnsureTodayMonday;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\EnsureTodayMonday;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,11 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // Disable CSRF validation for mentioned paths
         $middleware->validateCsrfTokens(except: [
-            'stripe/*'
+            'stripe/*',
         ]);
 
         // Using the custom middleware globally
-        //$middleware->append(EnsureTodayMonday::class);
+        // $middleware->append(EnsureTodayMonday::class);
 
         // Define alias of middleware
         $middleware->alias([

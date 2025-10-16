@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Session;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class PasswordResetRequest extends FormRequest
 {

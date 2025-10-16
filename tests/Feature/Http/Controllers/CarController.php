@@ -6,7 +6,6 @@ use App\Models\Car;
 use App\Models\CarImage;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Tests\TestCase;
@@ -32,7 +31,7 @@ class CarController extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user)->get('/car/')
             ->assertStatus(200)
-            ->assertSee('My Cars | ' . config('app.name'))
+            ->assertSee('My Cars | '.config('app.name'))
             ->assertSee('<h1 class="page-title">My Cars</h1>', false)
             ->assertSee('Add New Car')
             ->assertSee(['Image', 'Title', 'Date', 'Published', 'Actions'])
@@ -71,7 +70,7 @@ class CarController extends TestCase
 
         $response->assertStatus(302)
             ->assertRedirectBack()
-            ->assertSessionDoesntHaveErrors(['id', 'user_id', 'description', 'published_at', 'created_at', 'updated_at', 'deleted_at',])
+            ->assertSessionDoesntHaveErrors(['id', 'user_id', 'description', 'published_at', 'created_at', 'updated_at', 'deleted_at'])
             ->assertSessionHasErrors([
                 'maker_id',
                 'model_id',
@@ -171,7 +170,7 @@ class CarController extends TestCase
                 'power_door_locks' => '1',
                 'abs' => '1',
             ],
-            'images' => $images
+            'images' => $images,
         ]);
 
         $response->assertStatus(302)
@@ -202,7 +201,7 @@ class CarController extends TestCase
         $this->assertDatabaseCount('car_images', $imageCount + count($images));
         $this->assertDatabaseHas('car_images', ['car_id' => $carCount + 1]);
 
-        $this->assertDatabaseCount('car_features',  $carCount + 1);
+        $this->assertDatabaseCount('car_features', $carCount + 1);
         $this->assertDatabaseHas('car_features', [
             'car_id' => $carCount + 1,
             'air_conditioning' => 1,
@@ -217,7 +216,7 @@ class CarController extends TestCase
             'climate_control' => 0,
             'rear_parking_sensors' => 0,
             'leather_seats' => 0,
-            ]);
+        ]);
     }
 
     public function test_car_update_page_renders_with_correct_data(): void
@@ -233,21 +232,21 @@ class CarController extends TestCase
             ->assertViewHas('car', $car)
             ->assertSeeInOrder([
                 '<select id="makerSelect" name="maker_id"',
-                '<option selected value="' . $car->maker_id . '"',
+                '<option selected value="'.$car->maker_id.'"',
                 $car->maker->name,
-                '</option'
+                '</option',
             ], false)
             ->assertSeeInOrder([
                 '<select id="modelSelect" name="model_id"',
-                '<option selected value="' . $car->model_id . '"',
+                '<option selected value="'.$car->model_id.'"',
                 $car->model->name,
-                '</option'
+                '</option',
             ], false)
             ->assertSeeInOrder([
                 '<select name="year"',
-                '<option selected value="' . $car->year . '"',
+                '<option selected value="'.$car->year.'"',
                 $car->year,
-                '</option'
+                '</option',
             ], false)
             ->assertSeeInOrder([
                 '<input type="radio" name="car_type_id" value="'.$car->car_type_id.'"',
@@ -276,15 +275,15 @@ class CarController extends TestCase
             ], false)
             ->assertSeeInOrder([
                 '<select id="stateSelect" name="state_id"',
-                '<option selected value="' . $car->state_id . '"',
+                '<option selected value="'.$car->state_id.'"',
                 $car->state->name,
-                '</option'
+                '</option',
             ], false)
             ->assertSeeInOrder([
                 '<select id="citySelect" name="city_id"',
-                '<option selected value="' . $car->city_id . '"',
+                '<option selected value="'.$car->city_id.'"',
                 $car->city->name,
-                '</option'
+                '</option',
             ], false)
             ->assertSeeInOrder([
                 'input type="text" name="address" value="'.$car->address.'" placeholder="Address"',
@@ -294,7 +293,7 @@ class CarController extends TestCase
             ], false)
             ->assertSeeInOrder([
                 'textarea name="description" rows="5"',
-                $car->description . '</textarea'
+                $car->description.'</textarea',
             ], false)
             ->assertSeeInOrder([
                 'input type="date" name="published_at" value="'.date_create($car->published_at)->format('Y-m-d').'"',
@@ -394,23 +393,23 @@ class CarController extends TestCase
             ->assertSessionHas('success', 'Car Updated Successfully.');
 
         $this->assertDatabaseHas('cars', [
-                'user_id' => $user->id,
-                'maker_id' => 1,
-                'model_id' => 2,
-                'year' => 2025,
-                'price' => 15000,
-                'vin' => '123456789ABCT123A',
-                'mileage' => 20000,
-                'interior_color' => 'Black',
-                'exterior_color' => 'White',
-                'car_type_id' => 1,
-                'fuel_type_id' => 1,
-                'state_id' => 1,
-                'city_id' => 1,
-                'address' => 'Test Address',
-                'phone' => '18889991234',
-                'description' => null,
-            ])
+            'user_id' => $user->id,
+            'maker_id' => 1,
+            'model_id' => 2,
+            'year' => 2025,
+            'price' => 15000,
+            'vin' => '123456789ABCT123A',
+            'mileage' => 20000,
+            'interior_color' => 'Black',
+            'exterior_color' => 'White',
+            'car_type_id' => 1,
+            'fuel_type_id' => 1,
+            'state_id' => 1,
+            'city_id' => 1,
+            'address' => 'Test Address',
+            'phone' => '18889991234',
+            'description' => null,
+        ])
             ->assertDatabaseHas('car_features', [
                 'car_id' => $car->id,
                 'air_conditioning' => 1,
@@ -488,7 +487,7 @@ class CarController extends TestCase
         $deletedImageIds = $car->images()->pluck('id')->toArray();
 
         $response = $this->actingAs($user)->put(route('car.updateImages', $car), [
-            'delete_images' => $deletedImageIds
+            'delete_images' => $deletedImageIds,
         ]);
 
         $response->assertStatus(302)
@@ -511,7 +510,7 @@ class CarController extends TestCase
         $newImagePositions = Arr::pluck($carImages, 'position', 'id');
 
         $response = $this->actingAs($user)->put(route('car.updateImages', $car), [
-            'positions' => $newImagePositions
+            'positions' => $newImagePositions,
         ]);
 
         $response->assertStatus(302)
@@ -574,7 +573,7 @@ class CarController extends TestCase
 
         foreach ($user1Car->images as $image) {
             $response->assertSee($image->image_path)
-                ->assertSee('img src="' . htmlentities($image->image_path) . '"', false);
+                ->assertSee('img src="'.htmlentities($image->image_path).'"', false);
         }
     }
 
@@ -590,7 +589,4 @@ class CarController extends TestCase
         $response->assertStatus(302)
             ->assertRedirectToRoute('login');
     }
-
 }
-
-

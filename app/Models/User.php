@@ -30,7 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at',
     ];
 
-    //protected $guarded = [];
+    // protected $guarded = [];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -56,37 +56,36 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /** Returns full name of user */
-    public function fullName(): string {
+    public function fullName(): string
+    {
         return sprintf('%s %s', $this->first_name, $this->last_name);
     }
 
     /**
      * Returns true if user is signed by socialite
      * Otherwise false
-     * @return bool
      */
     public function isOauthUser(): bool
     {
-        return !$this->password;
+        return ! $this->password;
     }
 
     /**
      * User's added cars
-     * @return HasMany
      */
-    public function cars(): HasMany {
+    public function cars(): HasMany
+    {
         return $this->hasMany(Car::class, 'user_id', 'id');
     }
 
     /**
      * User's favorite cars connected through pivot table
-     * @return BelongsToMany
      */
     public function favoriteCars(): BelongsToMany
     {
         return $this->belongsToMany(Car::class, 'favorite_cars', 'user_id', 'car_id')
             ->withPivot('id')
             ->orderBy('favorite_cars.id', 'desc'); // To order watchlist by descending ID
-            //->withTimestamps();
+        // ->withTimestamps();
     }
 }

@@ -9,7 +9,7 @@ class PasswordResetTest extends TestCase
 {
     public function test_password_reset_page_can_render_with_errors(): void
     {
-        $errorBag = new \Illuminate\Support\ViewErrorBag();
+        $errorBag = new \Illuminate\Support\ViewErrorBag;
         $errorBag->put('default', new \Illuminate\Support\MessageBag([
             'email' => ['The email is required.'],
             'token' => ['The token is required.'],
@@ -23,7 +23,7 @@ class PasswordResetTest extends TestCase
             'token' => '',
         ]);
 
-        $contents->assertSee('Password Reset | ' . config('app.name')); // title tag
+        $contents->assertSee('Password Reset | '.config('app.name')); // title tag
         $contents->assertSee('Password Reset'); // heading
         $contents->assertSee('value=""', false); // token field
         $contents->assertSee('name="email"', false); // email input

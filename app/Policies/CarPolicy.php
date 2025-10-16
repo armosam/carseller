@@ -21,7 +21,7 @@ class CarPolicy
      * if ability is creat for car then $arg will be a string App/Model/Car
      * if ability is update for car then $arg will be the model of car
      */
-    public function before(?User $user, string $ability, $arg): bool|null
+    public function before(?User $user, string $ability, $arg): ?bool
     {
         if ($user?->can('administrator')) {
             return true;
@@ -39,7 +39,7 @@ class CarPolicy
      * then final result will be false.
      * If after returns null then final result will be true.
      */
-    public function after(?User $user, Car $car): bool|null
+    public function after(?User $user, Car $car): ?bool
     {
         return null;
     }
@@ -50,7 +50,7 @@ class CarPolicy
     public function view(User $user, Car $car): Response
     {
         // The owner can see not published car but others not
-        return (!empty($car->published_at) || $car->owner()->is($user))
+        return (! empty($car->published_at) || $car->owner()->is($user))
             ? Response::allow()
             : Response::denyAsNotFound();
     }
@@ -62,7 +62,7 @@ class CarPolicy
     {
         // return ($user->is(Auth::user()) && !empty($user->phone));
         // With custom message
-        return ($user->is(Auth::user()) && !empty($user->phone))
+        return ($user->is(Auth::user()) && ! empty($user->phone))
              ? Response::allow()
              : Response::deny('You are not authorized to create a car.');
     }

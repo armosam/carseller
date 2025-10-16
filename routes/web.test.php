@@ -19,12 +19,10 @@ Route::get('/product/{category?}', function (string $category = '') {
     return "Product for category: $category";
 })->whereAlphaNumeric('category')->name('product.category');
 
-
 // http://laravel.test/en/product/1111/review/good333
 Route::get('{lang}/product/{id}/review/{rid}', function (string $lang, string $id, string $rid) {
     return "Product language: $lang  id: $id reviewID: $rid";
 })->whereNumber('id')->whereIn('lang', ['en', 'ru'])->whereAlphaNumeric('rid');
-
 
 // http://laravel.test/order/111/aaaaaaaa
 Route::get('/order/{id}/{slag?}', function (string $id, string $slag = '') {
@@ -49,18 +47,16 @@ Route::prefix('/admin')->group(function () {
         return view('admin/welcome');
     })->name('home');
 
-    //http://laravel.test/admin/login
+    // http://laravel.test/admin/login
     Route::get('/login', function () {
         return view('admin/login');
     })->name('login');
 });
 
-
 // Challenge
 Route::get('/sum/{a}/{b}', function (float $a, float $b) {
     return $a + $b;
 })->whereNumber(['a', 'b']);
-
 
 // Controller route
 Route::get('car', [\App\Http\Controllers\CarController::class, 'index']);

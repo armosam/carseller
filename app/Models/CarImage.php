@@ -12,9 +12,8 @@ class CarImage extends Model
     use HasFactory;
 
     public $timestamps = false; // Disables timestamp creation
+
     protected $fillable = ['image_path', 'position'];
-
-
 
     public function car(): BelongsTo
     {
@@ -23,6 +22,7 @@ class CarImage extends Model
 
     /**
      * Resolves image URLs for local paths and remote links.
+     *
      * @return mixed|string
      */
     public function getUrl()
@@ -30,6 +30,7 @@ class CarImage extends Model
         if (str_starts_with($this->image_path, 'http')) {
             return $this->image_path;
         }
+
         return Storage::url($this->image_path);
     }
 }

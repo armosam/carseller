@@ -11,7 +11,7 @@ class EnsureTodayMonday
     /**
      * Handle an incoming request.
      *
-     * @param Closure(Request): (Response) $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -19,6 +19,7 @@ class EnsureTodayMonday
         $dayOfWeek = now()->dayOfWeek;
         if ($dayOfWeek === 1) {
             $request->merge(['EnsureTodayMonday' => true]);
+
             return $next($request);
         }
 

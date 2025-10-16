@@ -28,19 +28,18 @@ class MakerFactory extends Factory
 
     /**
      * Custom method
-     * @return Factory
      */
-    public function toyota(): Factory {
+    public function toyota(): Factory
+    {
         return $this->state(function (array $attributes) {
             return ['name' => 'Toyota'];
         });
     }
 
     /** Custom method
-     * @param string $name
-     * @return Factory
      */
-    public function makerSequence(string $name): Factory {
-        return $this->state( new Sequence( fn(Sequence $sequence) => ['name' => "$name $sequence->index"] ) );
+    public function makerSequence(string $name): Factory
+    {
+        return $this->state(new Sequence(fn (Sequence $sequence) => ['name' => "$name $sequence->index"]));
     }
 }

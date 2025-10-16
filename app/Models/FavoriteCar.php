@@ -14,11 +14,13 @@ class FavoriteCar extends Model
 
     protected $fillable = ['user_id', 'car_id'];
 
-    public function cars(): HasMany {
+    public function cars(): HasMany
+    {
         return $this->hasMany(Car::class, 'id', 'car_id');
     }
 
-    public function users(): HasMany {
+    public function users(): HasMany
+    {
         return $this->hasMany(User::class, 'id', 'user_id');
     }
 }

@@ -3,10 +3,10 @@
 namespace App\Http\Requests\Session;
 
 use App\Rules\PasswordResetTokenRule;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\ValidationRule;
 
 class StorePasswordResetRequest extends FormRequest
 {
@@ -31,6 +31,7 @@ class StorePasswordResetRequest extends FormRequest
             'token' => new PasswordResetTokenRule($this->input('email')),
         ];
     }
+
     public function messages(): array
     {
         return [

@@ -26,20 +26,20 @@ class CarFactory extends Factory
     {
         return [
             'maker_id' => Maker::query()->inRandomOrder()->first()->id,
-            'model_id' => function(array $attributes) {
+            'model_id' => function (array $attributes) {
                 return Model::query()->where('maker_id', $attributes['maker_id'])->inRandomOrder()->firstOrFail()->id;
             },
             'year' => fake()->dateTimeBetween('-28 years')->format('Y'),
-            'price' => (int)fake()->randomFloat(2, 2, 100) * 1000,
+            'price' => (int) fake()->randomFloat(2, 2, 100) * 1000,
             'vin' => strtoupper(Str::random(17)),
-            'mileage' => (int)fake()->randomFloat(2, 1, 350) * 1000,
+            'mileage' => (int) fake()->randomFloat(2, 1, 350) * 1000,
             'interior_color' => fake()->colorName(),
             'exterior_color' => fake()->colorName(),
             'car_type_id' => CarType::query()->inRandomOrder()->first()->id,
             'fuel_type_id' => FuelType::query()->inRandomOrder()->first()->id,
             'user_id' => User::query()->inRandomOrder()->first()->id,
             'state_id' => State::query()->inRandomOrder()->first()->id,
-            'city_id' => function(array $attributes) {
+            'city_id' => function (array $attributes) {
                 return City::query()->where('state_id', $attributes['state_id'])->inRandomOrder()->firstOrFail()->id;
             },
             'address' => fake()->address(),
@@ -47,8 +47,9 @@ class CarFactory extends Factory
                 return User::query()->find($attributes['user_id'])->phone;
             },
             'description' => fake()->text(2000),
-            'published_at' => function(array $attributes) {
+            'published_at' => function (array $attributes) {
                 $fakeDate = fake()->optional(0.9)->dateTimeBetween('-1 month', '+1 day');
+
                 return $fakeDate?->format('Y-m-d H:i:s');
             },
             'deleted_at' => null,

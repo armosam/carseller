@@ -3,7 +3,6 @@
 namespace Tests\Feature\View;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class HomeTest extends TestCase
@@ -29,10 +28,10 @@ class HomeTest extends TestCase
         // Empty Collection
         $cars = \Illuminate\Support\Collection::make();
         $contents = $this->view('index', [
-            'cars' => $cars
+            'cars' => $cars,
         ]);
 
-        $contents->assertSee('Home Page | ' . config('app.name'));
+        $contents->assertSee('Home Page | '.config('app.name'));
         $contents->assertSee('Login');
         $contents->assertSee('Signup');
         $contents->assertSee('<h2>Latest Added Cars</h2>', false);
@@ -42,7 +41,7 @@ class HomeTest extends TestCase
     public function test_it_can_render_with_cars(): void
     {
         // Mock Car Model
-        $car = new \App\Models\Car();
+        $car = new \App\Models\Car;
         $car->id = 1;
         $car->year = 2025;
         $car->price = 10000;
@@ -62,10 +61,10 @@ class HomeTest extends TestCase
 
         $cars = \Illuminate\Support\Collection::make([$car]);
         $contents = $this->view('index', [
-            'cars' => $cars
+            'cars' => $cars,
         ]);
 
-        $contents->assertSee('Home Page | ' . config('app.name'));
+        $contents->assertSee('Home Page | '.config('app.name'));
         $contents->assertSee('Login');
         $contents->assertSee('Signup');
         $contents->assertSee('<h2>Latest Added Cars</h2>', false);

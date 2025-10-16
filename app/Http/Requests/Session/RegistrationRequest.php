@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Session;
 
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Contracts\Validation\ValidationRule;
 
 class RegistrationRequest extends FormRequest
 {

@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -47,48 +47,51 @@ class Car extends EloquentModel
     /**
      * In case of create, update or delete model it will forget cached data
      * It will iterate to forget cache for paginated data
+     *
      * @return void
      */
     protected static function booted()
     {
-        $forget_cache = function() {
+        $forget_cache = function () {
             $count = self::query()->count();
-            for($i = 1; $i <= $count/30; $i++) {
+            for ($i = 1; $i <= $count / 30; $i++) {
                 Cache::forget('home-cars-'.$i);
             }
-            for($i = 1; $i <= $count/15; $i++) {
+            for ($i = 1; $i <= $count / 15; $i++) {
                 Cache::forget('favorite-cars-'.$i);
             }
-            for($i = 1; $i <= $count/5; $i++) {
+            for ($i = 1; $i <= $count / 5; $i++) {
                 Cache::forget('my-cars-'.$i);
             }
         };
 
-        static::created(function ($car) use($forget_cache){
+        static::created(function ($car) use ($forget_cache) {
             $forget_cache();
         });
-        static::updated(function ($car) use($forget_cache) {
+        static::updated(function ($car) use ($forget_cache) {
             $forget_cache();
         });
-        static::deleted(function ($car) use($forget_cache) {
+        static::deleted(function ($car) use ($forget_cache) {
             $forget_cache();
         });
     }
 
-
-    public function features (): HasOne {
+    public function features(): HasOne
+    {
         return $this->hasOne(CarFeature::class, 'car_id', 'id');
     }
 
-    public function primaryImage (): HasOne {
+    public function primaryImage(): HasOne
+    {
         return $this->hasOne(CarImage::class, 'car_id', 'id')->oldestOfMany('position');
     }
 
-    public function images(): HasMany {
+    public function images(): HasMany
+    {
         return $this->hasMany(CarImage::class, 'car_id', 'id')->orderBy('position');
     }
 
-    public function carType (): BelongsTo
+    public function carType(): BelongsTo
     {
         return $this->belongsTo(CarType::class, 'car_type_id', 'id');
     }
@@ -96,50 +99,50 @@ class Car extends EloquentModel
     public function favouredUsers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'favorite_cars', 'car_id', 'user_id');
-            //->withTimestamps();
+        // ->withTimestamps();
     }
 
-    public function fuelType (): BelongsTo
+    public function fuelType(): BelongsTo
     {
         return $this->belongsTo(FuelType::class, 'fuel_type_id', 'id');
     }
 
-    public function owner (): BelongsTo
+    public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function state (): BelongsTo
+    public function state(): BelongsTo
     {
         return $this->belongsTo(State::class, 'state_id', 'id');
     }
 
-    public function city (): BelongsTo
+    public function city(): BelongsTo
     {
         return $this->belongsTo(City::class, 'city_id', 'id');
     }
 
-    public function maker (): BelongsTo
+    public function maker(): BelongsTo
     {
         return $this->belongsTo(Maker::class, 'maker_id', 'id');
     }
 
-    public function model (): BelongsTo
+    public function model(): BelongsTo
     {
         return $this->belongsTo(Model::class, 'model_id', 'id');
     }
-
 
     public function getFormattedDate($column_name, $format = 'Y-m-d'): string
     {
         if (isset($this->{$column_name})) {
             return Carbon::parse($this->{$column_name})->format($format);
         }
-        return (new Carbon())->format($format);
+
+        return (new Carbon)->format($format);
     }
 
     public function getTitle(): string
     {
-        return $this->year . ' - ' . $this->maker->name . ' ' . $this->model->name;
+        return $this->year.' - '.$this->maker->name.' '.$this->model->name;
     }
 }

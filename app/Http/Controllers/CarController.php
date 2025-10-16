@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Car\StoreCarRequest;
+use App\Jobs\TranslateJob;
+use App\Mail\CarAdded;
 use App\Models\Car;
 use App\Models\CarFeature;
 use App\Models\CarImage;
 use App\Models\CarType;
 use App\Models\User;
-use App\Mail\CarAdded;
 use App\Rules\PhoneRule;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\JoinClause;
-use App\Http\Requests\Car\StoreCarRequest;
-use App\Jobs\TranslateJob;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,7 +47,6 @@ class CarController extends Controller
         return redirect()->route('car.show', Car::first());
         return redirect()->away('https://littlebeeline.com', 301);*/
 
-
         /*// Associate a new car type to the car
         $car = Car::find(1)->first();
         $carTypeHatchback = CarType::where('name', 'Hatchback')->first();
@@ -66,7 +65,6 @@ class CarController extends Controller
         // Removes given connections and if not provided then removes all
         $user->favoriteCars->detach([1,2]);
         $user->favoriteCars->detach();*/
-
 
         /*// Sessions
         $request = request();
@@ -87,10 +85,9 @@ class CarController extends Controller
         // Keep only success message session
         request()->session()->keep(['success']);*/
 
-
         // It gets first authenticated user, then returns cars of that user
-        //$cars = User::query()->find(Auth::id())
-        //$cars = request()->user()
+        // $cars = User::query()->find(Auth::id())
+        // $cars = request()->user()
         /*$cars = Auth::user()
             ->cars()
             ->with(['maker', 'model', 'primaryImage'])
@@ -109,11 +106,12 @@ class CarController extends Controller
                 ->with(['maker', 'model', 'primaryImage'])
                 ->orderBy('created_at', 'desc')
                 ->paginate(5);
-            //->withPath('user/cara');
-            //->appends(['some-sort' => 'price'])
-            //->withQueryString()
-            //->fragment('cars');
+            // ->withPath('user/cara');
+            // ->appends(['some-sort' => 'price'])
+            // ->withQueryString()
+            // ->fragment('cars');
         });
+
         return view('car.index', ['cars' => $cars]);
     }
 
@@ -123,11 +121,12 @@ class CarController extends Controller
     public function create(): View|RedirectResponse
     {
         // All bellow checking possible here but moved to the route
-        //Gate::authorize('create', Car::class);
-        if(request()->user()->cannot('create', Car::class)) {
+        // Gate::authorize('create', Car::class);
+        if (request()->user()->cannot('create', Car::class)) {
             return redirect()->route('profile.index')
                 ->with('error', 'You cannot create a car. Please provide your phone number.');
         }
+
         return view('car.create');
     }
 
@@ -205,14 +204,14 @@ class CarController extends Controller
         $newCar->features()->create($featureAttributes);
 
         foreach ($images as $position => $image) {
-            if($image->isFile() && $image->isReadable()) {
+            if ($image->isFile() && $image->isReadable()) {
                 $path = $image->store('images');
                 $newCar->images()->create(['image_path' => $path, 'position' => $position + 1]);
             }
         }
 
         // Sending email about car created
-        //Mail::to(Auth::user())->send(new CarAdded($newCar));
+        // Mail::to(Auth::user())->send(new CarAdded($newCar));
 
         // Adding queue job to send an email
         Mail::to(Auth::user())->queue(new CarAdded($newCar));
@@ -254,12 +253,10 @@ class CarController extends Controller
         // For different from auth user
         // Gate::forUser($user)->allows('car_update', $car);
 
-
         // Adds a job to the queue in 10 sec using queue closure
         /*dispatch(function () {
             logger('Hello World');
         })->delay(10);*/
-
 
         // Using dedicated job class to add a job to the queue
         TranslateJob::dispatch($car);
@@ -290,7 +287,7 @@ class CarController extends Controller
         $car->features()->update($featuresAttributes);
 
         // Set flash message
-        //$request->session()->flash('success', 'Car was updated');
+        // $request->session()->flash('success', 'Car was updated');
 
         return to_route('car.show', ['car' => $car])->with('success', 'Car Updated Successfully.');
     }
@@ -307,29 +304,26 @@ class CarController extends Controller
 
     /**
      * List car images
-     * @param Car $car
-     * @return View
      */
-    public function carImages (Car $car): View
+    public function carImages(Car $car): View
     {
         return view('car.images', ['car' => $car]);
     }
 
     /**
      * Add new images
-     * @param Request $request
-     * @param Car $car
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function addImages(Request $request, Car $car)
     {
         $request->validate([
             'images' => 'array',
-            //'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:4096', // Simple way or
+            // 'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:4096', // Simple way or
             'images.*' => File::image()
                 ->extensions('jpeg,png,jpg,gif,svg')
-                ->max(config('image.max_size'))
-                //->dimensions(Rule::dimensions()->maxWidth(config('image.max_width'))->maxHeight(config('image.max_height')))
+                ->max(config('image.max_size')),
+            // ->dimensions(Rule::dimensions()->maxWidth(config('image.max_width'))->maxHeight(config('image.max_height')))
         ]);
 
         $images = $request->file('images') ?? [];
@@ -344,11 +338,10 @@ class CarController extends Controller
 
     /**
      * Updated images
-     * @param Request $request
-     * @param Car $car
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateImages (Request $request, Car $car)
+    public function updateImages(Request $request, Car $car)
     {
         $data = $request->validate([
             'delete_images' => 'array',
@@ -380,8 +373,6 @@ class CarController extends Controller
 
     /**
      * Returns phone number of given car
-     * @param Car $car
-     * @return ?string
      */
     public function showPhone(Car $car): ?string
     {
@@ -410,7 +401,6 @@ class CarController extends Controller
         $query = Car::query()
             ->with(['maker', 'model', 'primaryImage', 'city' => ['state'], 'carType', 'fuelType', 'favouredUsers'])
             ->where('published_at', '<', now());
-
 
         if ($maker) {
             $query->where('maker_id', $maker);
@@ -460,7 +450,6 @@ class CarController extends Controller
         // Removes ordering and adds new one
         $query->reorder('price');
         */
-
 
         /*// REQUEST
         dump($request->all());
@@ -602,5 +591,4 @@ class CarController extends Controller
 
         return view('car.search', ['cars' => $cars]);
     }
-
 }

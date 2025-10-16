@@ -20,12 +20,13 @@ class Maker extends EloquentModel
         return CustomMakerFactory::new();
     }*/
 
-
-    public function cars(): HasMany {
+    public function cars(): HasMany
+    {
         return $this->hasMany(Car::class, 'maker_id', 'id');
     }
 
-    public function models(): HasMany {
+    public function models(): HasMany
+    {
         return $this->hasMany(Model::class, 'maker_id', 'id');
     }
 }

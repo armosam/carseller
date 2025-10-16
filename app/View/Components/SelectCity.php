@@ -21,7 +21,7 @@ class SelectCity extends Component
         $this->cities = Cache::rememberForever('cities', function () {
             return City::query()->with('state')->orderBy('name')->get();
         });
-        //$this->cities = City::query()->with('state')->orderBy('name')->get();
+        // $this->cities = City::query()->with('state')->orderBy('name')->get();
     }
 
     /**

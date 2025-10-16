@@ -37,9 +37,9 @@ Route::controller(SessionController::class)->prefix('auth')->group(function () {
 });
 
 Route::controller(ProfileController::class)->prefix('profile')->group(function () {
-   Route::get('/', 'index')->name('profile.index')->middleware('auth');
-   Route::put('/', 'update')->name('profile.update')->middleware('auth');
-   Route::put('/password', 'updatePassword')->name('profile.updatePassword')->middleware('auth');
+    Route::get('/', 'index')->name('profile.index')->middleware('auth');
+    Route::put('/', 'update')->name('profile.update')->middleware('auth');
+    Route::put('/password', 'updatePassword')->name('profile.updatePassword')->middleware('auth');
 });
 
 Route::controller(WatchlistController::class)->prefix('watchlist')->group(function () {
@@ -51,7 +51,6 @@ Route::controller(SocialiteController::class)->group(function () {
     Route::get('/login/oauth/{provider}', 'redirectToProvider')->name('login.oauth');
     Route::get('/callback/oauth/{provider}', 'handleProviderCallback');
 });
-
 
 Route::controller(EmailVerificationController::class)->prefix('email')->group(function () {
     Route::get('/verify/{id}/{hash}', 'verify')->middleware(['signed'])->name('verification.verify');
@@ -68,17 +67,16 @@ Route::controller(CarController::class)->prefix('car')->group(function () {
             Route::post('/', 'store')->name('car.store')->can('create', \App\Models\Car::class);
             Route::get('/create', 'create')->name('car.create');
             Route::get('/{car}', 'show')->name('car.show')->can('view', 'car');
-            Route::get('/{car}/edit', 'edit')->name('car.edit')->can('update','car');
-            Route::addRoute(['PUT','PATCH'],'{car}', 'update')->name('car.update')->can('update', 'car');
+            Route::get('/{car}/edit', 'edit')->name('car.edit')->can('update', 'car');
+            Route::addRoute(['PUT', 'PATCH'], '{car}', 'update')->name('car.update')->can('update', 'car');
             Route::delete('/{car}', 'destroy')->name('car.destroy')->can('delete', 'car');
-            Route::get('/{car}/images', 'carImages')->name('car.images')->can('update','car');
-            Route::post('/{car}/images', 'addImages')->name('car.addImages')->can('update','car');
-            Route::addRoute(['PUT','PATCH'],'/{car}/images', 'updateImages')->name('car.updateImages')->can('update','car');
+            Route::get('/{car}/images', 'carImages')->name('car.images')->can('update', 'car');
+            Route::post('/{car}/images', 'addImages')->name('car.addImages')->can('update', 'car');
+            Route::addRoute(['PUT', 'PATCH'], '/{car}/images', 'updateImages')->name('car.updateImages')->can('update', 'car');
             Route::post('/{car}/phone', 'showPhone')->name('car.showPhone');
         });
     });
 });
-
 
 Route::prefix('admin')->group(function () {
     Route::controller(CarController::class)->prefix('car')->group(function () {
@@ -87,11 +85,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/create', 'create')->name('admin.car.create');
         Route::get('/search', 'search')->name('admin.car.search');
         Route::get('/{car}', 'show')->name('admin.car.show');
-        Route::get('/{car}/edit', 'edit')->name('admin.car.edit')->can('update','car');
-        Route::addRoute(['PUT','PATCH'],'{car}', 'update')->name('admin.car.update')->can('update', 'car');
+        Route::get('/{car}/edit', 'edit')->name('admin.car.edit')->can('update', 'car');
+        Route::addRoute(['PUT', 'PATCH'], '{car}', 'update')->name('admin.car.update')->can('update', 'car');
         Route::delete('/{car}', 'destroy')->name('admin.car.destroy')->can('delete', 'car');
     });
 });
-
 
 Route::fallback(FallbackController::class);

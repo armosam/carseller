@@ -14,7 +14,7 @@ class WatchlistController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('login');
         }
 
@@ -42,27 +42,28 @@ class WatchlistController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('login');
         }
 
         // Forget paginated cache for homepage and favorite page
         $count = Car::query()->count();
         for ($i = 1; $i <= $count / 30; $i++) {
-            Cache::forget('home-cars-' . $i);
+            Cache::forget('home-cars-'.$i);
         }
         for ($i = 1; $i <= $count / 15; $i++) {
-            Cache::forget('favorite-cars-' . $i);
+            Cache::forget('favorite-cars-'.$i);
         }
 
         // For large data this code will not perform better
-        //$carExists = $user->favoriteCars->contains($car);
+        // $carExists = $user->favoriteCars->contains($car);
 
         $carExists = $user->favoriteCars()->where('car_id', $car->id)->exists();
 
         if ($carExists) {
             $user->favoriteCars()->detach($car);
-            //return back()->with('success', 'Car successfully removed from favorite list.');
+
+            // return back()->with('success', 'Car successfully removed from favorite list.');
             // Return JSON data
             return response()->json([
                 'message' => 'Car successfully removed from favorite list.',
@@ -70,6 +71,7 @@ class WatchlistController extends Controller
         }
 
         $user->favoriteCars()->attach($car);
+
         // return back()->with('success', 'Car successfully added to favorite list.');
         return response()->json([
             'message' => 'Car successfully added to favorite list.',

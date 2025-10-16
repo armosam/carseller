@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Nette\Utils\Random;
 
 class AuthController extends Controller
 {
@@ -24,6 +23,7 @@ class AuthController extends Controller
     public function passwordResetRequest(): View
     {
         Auth::logout();
+
         return view('auth.password-reset-request');
     }
 

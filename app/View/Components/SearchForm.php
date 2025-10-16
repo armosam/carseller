@@ -34,7 +34,6 @@ class SearchForm extends Component
      * - view
      * - withAttributes
      * - withName
-     *
      */
     /*public function test()
     {

@@ -4,7 +4,6 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class WatchlistControllerTest extends TestCase
@@ -28,7 +27,7 @@ class WatchlistControllerTest extends TestCase
         $user = User::factory()->create();
         $response = $this->actingAs($user)->get(route('watchlist.index'));
         $response->assertStatus(200);
-        $response->assertSee('Favorite Cars | ' . config('app.name'));
+        $response->assertSee('Favorite Cars | '.config('app.name'));
         $response->assertSee('<h1 class="page-title">My Favourite Cars</h1>', false);
         $response->assertSee('Logout');
         $response->assertSee('You do not have any favourite cars.');
