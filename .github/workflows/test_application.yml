@@ -27,7 +27,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set Directory Permissions
-        run: chmod -R 770 storage bootstrap/cache
+        run: |
+          find . -type d -exec chmod 2750 {} +
+          find . -type f -exec chmod 640 {} +
+          find storage -type d -exec chmod 2770 {} +
+          find storage -type f -exec chmod 660 {} +
+          find bootstrap/cache -type d -exec chmod 2770 {} +
+          find bootstrap/cache -type f -exec chmod 660 {} +
 
       - name: Copy .env file
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
