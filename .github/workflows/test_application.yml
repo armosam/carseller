@@ -28,12 +28,13 @@ jobs:
 
       - name: Set Directory Permissions
         run: |
-          find . -type d -exec chmod 2750 {} +
-          find . -type f -exec chmod 640 {} +
-          find storage -type d -exec chmod 2770 {} +
-          find storage -type f -exec chmod 660 {} +
-          find bootstrap/cache -type d -exec chmod 2770 {} +
-          find bootstrap/cache -type f -exec chmod 660 {} +
+          find . -type d -exec chmod 2750 {} + || true
+          find . -type f -exec chmod 640 {} + || true
+          find storage -type d -exec chmod 2770 {} + || true
+          find storage -type f -exec chmod 660 {} + || true
+          find bootstrap/cache -type d -exec chmod 2770 {} + || true
+          find bootstrap/cache -type f -exec chmod 660 {} + || true
+          ls -la .
 
       - name: Copy .env file
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
